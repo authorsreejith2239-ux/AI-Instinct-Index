@@ -83,7 +83,6 @@
             display: block;
         }
 
-        /* SURVEY MODE STYLES */
         .survey-container {
             background-color: #1e2332;
             border: 2px solid #00f0ff;
@@ -106,15 +105,6 @@
             background: linear-gradient(90deg, #00f0ff, #ff0078);
             width: 0%;
             transition: width 0.3s ease;
-        }
-
-        .question-block {
-            margin-bottom: 30px;
-            display: none;
-        }
-
-        .question-block.active {
-            display: block;
         }
 
         .dimension-header {
@@ -219,7 +209,6 @@
             color: #f5f5f5;
         }
 
-        /* RESULTS DASHBOARD */
         .results-container {
             background-color: #1e2332;
             border: 2px solid #ff0078;
@@ -338,12 +327,6 @@
             font-style: italic;
         }
 
-        .radar-chart {
-            width: 100%;
-            max-width: 500px;
-            margin: 40px auto;
-        }
-
         .export-buttons {
             display: flex;
             gap: 20px;
@@ -369,7 +352,6 @@
             color: #121423;
         }
 
-        /* ADMIN DASHBOARD */
         .admin-container {
             background-color: #1e2332;
             border: 2px solid #00f0ff;
@@ -450,50 +432,6 @@
             color: #121423;
         }
 
-        .heatmap-label {
-            font-size: 0.8rem;
-            color: #b4b4be;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .temp-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .temp-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: #1e2332;
-            padding: 40px;
-            border-radius: 8px;
-            border: 2px solid #00f0ff;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-close {
-            float: right;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #00f0ff;
-        }
-
-        .modal-close:hover {
-            color: #ff0078;
-        }
-
         .input-field {
             width: 100%;
             padding: 12px;
@@ -508,15 +446,6 @@
         .input-field:focus {
             outline: none;
             border-color: #00f0ff;
-        }
-
-        .success-message {
-            background-color: #1a4d2e;
-            color: #90ee90;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00ff00;
         }
 
         @media (max-width: 768px) {
@@ -553,9 +482,9 @@
         </header>
 
         <div class="mode-selector">
-            <button class="mode-btn active" onclick="switchMode('home')">Home</button>
-            <button class="mode-btn" onclick="switchMode('survey')">Take Survey</button>
-            <button class="mode-btn" onclick="switchMode('admin')">Admin Dashboard</button>
+            <button class="mode-btn active" onclick="switchMode('home', this)">Home</button>
+            <button class="mode-btn" onclick="switchMode('survey', this)">Take Survey</button>
+            <button class="mode-btn" onclick="switchMode('admin', this)">Admin Dashboard</button>
         </div>
 
         <!-- HOME SECTION -->
@@ -597,7 +526,7 @@
                     <p style="color: #f5f5f5;"><strong style="color: #00f0ff;">11. Adoption Stage</strong> - Current phase and scaling readiness</p>
                 </div>
 
-                <button onclick="switchMode('survey')" style="margin-top: 40px; padding: 15px 40px; font-size: 1.1rem; border-color: #ff0078; color: #ff0078;">
+                <button onclick="switchMode('survey', event.target)" style="margin-top: 40px; padding: 15px 40px; font-size: 1.1rem; border-color: #ff0078; color: #ff0078;">
                     ▶ Start Survey Now
                 </button>
             </div>
@@ -679,7 +608,6 @@
     </div>
 
     <script>
-        // SURVEY DATA - 68 QUESTIONS ACROSS 11 DIMENSIONS
         const surveyData = [
             {
                 dimension: "1. EXPLORATION (Try)",
@@ -815,19 +743,16 @@
             }
         ];
 
-        // STATE MANAGEMENT
         let currentQuestion = 0;
         let responses = [];
         let allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
 
-        // INITIALIZE SURVEY
         function initSurvey() {
             responses = [];
             currentQuestion = 0;
             renderQuestion();
         }
 
-        // RENDER CURRENT QUESTION
         function renderQuestion() {
             let globalIndex = 0;
             let dimensionIndex = 0;
@@ -884,20 +809,17 @@
 
             document.getElementById('surveyContent').innerHTML = html;
 
-            // Highlight previously selected answer
             if (responses[currentQuestion] !== undefined) {
                 const options = document.querySelectorAll('.likert-option');
                 options[responses[currentQuestion] - 1].classList.add('selected');
             }
 
-            // Update button visibility
-            const totalQuestions = surveyData.reduce((sum, d) => sum + d.questions.length, 0);
+            const totalQuestions2 = surveyData.reduce((sum, d) => sum + d.questions.length, 0);
             document.getElementById('btnPrev').style.display = currentQuestion > 0 ? 'block' : 'none';
-            document.getElementById('btnNext').style.display = currentQuestion < totalQuestions - 1 ? 'block' : 'none';
-            document.getElementById('btnSubmit').style.display = currentQuestion === totalQuestions - 1 ? 'block' : 'none';
+            document.getElementById('btnNext').style.display = currentQuestion < totalQuestions2 - 1 ? 'block' : 'none';
+            document.getElementById('btnSubmit').style.display = currentQuestion === totalQuestions2 - 1 ? 'block' : 'none';
         }
 
-        // SELECT ANSWER
         function selectAnswer(value) {
             responses[currentQuestion] = value;
             const options = document.querySelectorAll('.likert-option');
@@ -905,7 +827,6 @@
             options[value - 1].classList.add('selected');
         }
 
-        // NEXT QUESTION
         function nextQuestion() {
             if (responses[currentQuestion] === undefined) {
                 alert('Please select an answer before proceeding');
@@ -915,15 +836,14 @@
             renderQuestion();
         }
 
-        // PREVIOUS QUESTION
         function previousQuestion() {
             currentQuestion--;
             renderQuestion();
         }
 
-        // SUBMIT SURVEY
         function submitSurvey() {
-            if (responses.length !== surveyData.reduce((sum, d) => sum + d.questions.length, 0)) {
+            const totalQuestions = surveyData.reduce((sum, d) => sum + d.questions.length, 0);
+            if (responses.length !== totalQuestions) {
                 alert('Please complete all questions');
                 return;
             }
@@ -938,10 +858,9 @@
             localStorage.setItem('allResponses', JSON.stringify(allResponses));
 
             displayResults(results);
-            switchMode('results');
+            switchMode('results', null);
         }
 
-        // CALCULATE RESULTS
         function calculateResults() {
             let dimensionScores = [];
             let questionIndex = 0;
@@ -952,9 +871,8 @@
 
                 for (let q = 0; q < questions.length; q++) {
                     let answer = responses[questionIndex];
-                    // Handle reverse scored questions
                     if (questions[q].includes('(REVERSE)')) {
-                        answer = 6 - answer; // Reverse: 1→5, 2→4, 3→3, 4→2, 5→1
+                        answer = 6 - answer;
                     }
                     dimensionSum += answer;
                     questionIndex++;
@@ -963,7 +881,7 @@
                 const average = dimensionSum / questions.length;
                 dimensionScores.push({
                     name: surveyData[dim].dimension,
-                    score: Math.round(average * 20), // Convert to 0-100 scale
+                    score: Math.round(average * 20),
                     average: average
                 });
             }
@@ -978,7 +896,6 @@
             };
         }
 
-        // DISPLAY RESULTS
         function displayResults(results) {
             const recommendations = {
                 "Strong": "Your organization demonstrates strong behavioral readiness for AI adoption. Focus on scaling and expanding AI initiatives across more complex use cases.",
@@ -1036,17 +953,16 @@
                 </div>
                 <div class="export-buttons">
                     <button class="btn-export" onclick="exportResultsAsPDF()">📄 Export as PDF</button>
-                    <button class="btn-export" onclick="switchMode('survey'); initSurvey();">🔄 Retake Survey</button>
+                    <button class="btn-export" onclick="switchMode('survey', event.target); initSurvey();">🔄 Retake Survey</button>
                 </div>
             `;
 
             document.getElementById('resultsContent').innerHTML = html;
         }
 
-        // ADMIN FUNCTIONS
         function unlockAdmin() {
             const password = document.getElementById('adminPassword').value;
-            if (password === 'admin123') { // Simple admin password - change in production
+            if (password === 'admin123') {
                 document.getElementById('adminContent').style.display = 'block';
                 document.getElementById('adminPassword').style.display = 'none';
                 document.querySelector('button[onclick="unlockAdmin()"]').style.display = 'none';
@@ -1064,10 +980,7 @@
                 document.getElementById('avgScore').textContent = avgScore;
                 document.getElementById('completionRate').textContent = '100%';
 
-                // Update heatmap
                 updateHeatmap();
-
-                // Update table
                 updateResponsesTable();
             }
         }
@@ -1133,7 +1046,7 @@
         }
 
         function exportResultsAsPDF() {
-            alert('PDF export feature: Please copy results and paste into a word processor or use browser print function (Ctrl+P / Cmd+P)');
+            alert('PDF export: Use browser print function (Ctrl+P / Cmd+P) to save as PDF');
         }
 
         function clearAllData() {
@@ -1145,20 +1058,18 @@
             }
         }
 
-        // MODE SWITCHING
-        function switchMode(mode) {
+        function switchMode(mode, button) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(mode).classList.add('active');
 
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            if (button) button.classList.add('active');
 
             if (mode === 'survey') {
                 initSurvey();
             }
         }
 
-        // Initialize on load
         window.addEventListener('load', function() {
             initSurvey();
         });
