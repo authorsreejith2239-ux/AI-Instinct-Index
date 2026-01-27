@@ -645,6 +645,230 @@
             border: 1px solid #ff4444;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1e2332;
+            border: 2px solid #00f0ff;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            color: #00f0ff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: #b4b4be;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #b4b4be;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a1f2e;
+            border: 2px solid #2a2f40;
+            color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00f0ff;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background-color: #00f0ff;
+            color: #121423;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-register:hover {
+            background-color: #00d9e8;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .user-info-bar {
+            background-color: #0a0d15;
+            padding: 12px 20px;
+            border-bottom: 2px solid #00f0ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .user-name {
+            color: #00f0ff;
+            font-weight: 600;
+        }
+
+        .user-tenure {
+            color: #b4b4be;
+            font-size: 0.9rem;
+        }
+
+        @keyframes pulse {
+
+        .strength-weak {
+            background-color: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1e2332;
+            border: 2px solid #00f0ff;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            color: #00f0ff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: #b4b4be;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #b4b4be;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a1f2e;
+            border: 2px solid #2a2f40;
+            color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00f0ff;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background-color: #00f0ff;
+            color: #121423;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-register:hover {
+            background-color: #00d9e8;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .user-info-bar {
+            background-color: #0a0d15;
+            padding: 12px 20px;
+            border-bottom: 2px solid #00f0ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .user-name {
+            color: #00f0ff;
+            font-weight: 600;
+        }
+
+        .user-tenure {
+            color: #b4b4be;
+            font-size: 0.9rem;
+        }
+
         @keyframes pulse {
             0%, 100% {
                 opacity: 1;
@@ -703,7 +927,7 @@
 
         <div class="mode-selector">
             <button class="mode-btn active" data-mode="home" onclick="app.switchMode(event)">Home</button>
-            <button class="mode-btn" data-mode="survey" onclick="app.switchMode(event)">
+            <button class="mode-btn" data-mode="survey" onclick="app.startSurvey()">
                 Take Survey
                 <span class="badge" id="surveyBadge">New</span>
             </button>
@@ -759,9 +983,43 @@
             </div>
         </div>
 
+        <!-- REGISTRATION MODAL -->
+        <div id="registrationModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">📝 Register</div>
+                <div class="modal-subtitle">Please provide your details before starting the survey</div>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email ID *</label>
+                    <input type="email" id="emailId" class="form-input" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tenure at Current Role (Years) *</label>
+                    <input type="number" id="tenure" class="form-input" placeholder="e.g., 2.5" min="0" step="0.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Total Work Experience (Years) *</label>
+                    <input type="number" id="totalExperience" class="form-input" placeholder="e.g., 8" min="0" step="0.5" required>
+                </div>
+
+                <button class="btn-register" onclick="app.submitRegistration()">Start Survey →</button>
+            </div>
+        </div>
+
         <!-- SURVEY SECTION -->
         <div id="survey" class="section">
             <div class="survey-container">
+                <div id="userInfoBar" style="display: none;">
+                    <div class="user-name" id="userNameDisplay"></div>
+                    <div class="user-tenure" id="userDetailsDisplay"></div>
+                </div>
                 <div class="progress-section">
                     <div class="progress-header">
                         <span class="progress-text" id="progressText">Question 1 of 68</span>
@@ -831,6 +1089,7 @@
                                 <thead>
                                     <tr>
                                         <th>Response ID</th>
+                                        <th>Name</th>
                                         <th>Overall Score</th>
                                         <th>Readiness Level</th>
                                         <th>Timestamp</th>
@@ -851,6 +1110,7 @@
                         <button class="btn-export" onclick="app.syncToGoogleSheets()">☁️ Sync to Google Sheets</button>
                         <button class="btn-export" onclick="app.exportDataAsCSV()">📊 Export as CSV</button>
                         <button class="btn-export" onclick="app.exportGroupReport()">📈 Export Group Report</button>
+                        <button class="btn-export" onclick="app.resetSurvey()" style="border-color: #ffd700; color: #ffd700;">🔄 Reset Survey</button>
                         <button class="btn-export" onclick="app.clearAllData()" style="border-color: #ff4444; color: #ff4444;">🗑️ Clear All Data</button>
                     </div>
                 </div>
@@ -1005,10 +1265,29 @@
             allResponses: [],
             currentReportTab: 'individual',
             isAdminLoggedIn: false,
+            currentRegistration: null,
 
             init() {
                 this.loadResponses();
+                this.loadRegistrations();
                 this.updateBadges();
+            },
+
+            loadRegistrations() {
+                try {
+                    const stored = localStorage.getItem('aiSurveyRegistrations');
+                    this.allRegistrations = stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    this.allRegistrations = [];
+                }
+            },
+
+            saveRegistrations() {
+                try {
+                    localStorage.setItem('aiSurveyRegistrations', JSON.stringify(this.allRegistrations));
+                } catch (e) {
+                    console.log('Unable to save registrations');
+                }
             },
 
             updateBadges() {
@@ -1065,6 +1344,37 @@
             },
 
             startSurvey() {
+                document.getElementById('registrationModal').classList.add('active');
+            },
+
+            submitRegistration() {
+                const fullName = document.getElementById('fullName').value.trim();
+                const emailId = document.getElementById('emailId').value.trim();
+                const tenure = parseFloat(document.getElementById('tenure').value);
+                const totalExperience = parseFloat(document.getElementById('totalExperience').value);
+
+                if (!fullName || !emailId || isNaN(tenure) || isNaN(totalExperience)) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                if (!emailId.includes('@')) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+
+                this.currentRegistration = {
+                    fullName,
+                    emailId,
+                    tenure,
+                    totalExperience,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                this.sendRegistrationToSheets();
+
+                document.getElementById('registrationModal').classList.remove('active');
+
                 this.responses = new Array(this.getTotalQuestions()).fill(undefined);
                 this.currentQuestion = 0;
 
@@ -1079,10 +1389,53 @@
                 document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
                 document.getElementById('survey').classList.add('active');
 
+                document.getElementById('userInfoBar').style.display = 'flex';
+                document.getElementById('userNameDisplay').textContent = `👤 ${fullName}`;
+                document.getElementById('userDetailsDisplay').textContent = `Tenure: ${tenure} yrs | Total Experience: ${totalExperience} yrs`;
+
                 setTimeout(() => {
                     this.renderQuestion();
                     window.scrollTo(0, 0);
                 }, 50);
+            },
+
+            sendRegistrationToSheets() {
+                const sheetsUrl = document.getElementById('sheetsUrl').value;
+                if (!sheetsUrl) {
+                    console.log('Google Sheets URL not configured.');
+                    return;
+                }
+
+                const payload = {
+                    type: 'registration',
+                    fullName: this.currentRegistration.fullName,
+                    emailId: this.currentRegistration.emailId,
+                    tenure: this.currentRegistration.tenure,
+                    totalExperience: this.currentRegistration.totalExperience,
+                    timestamp: this.currentRegistration.timestamp
+                };
+
+                this.syncWithRetry(sheetsUrl, payload, 'registration');
+            },
+
+            syncWithRetry(sheetsUrl, payload, type, attempt = 1) {
+                const maxAttempts = 3;
+                fetch(sheetsUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                }).then(() => {
+                    console.log(`✓ ${type} data synced to Google Sheets (attempt ${attempt})`);
+                }).catch(e => {
+                    if (attempt < maxAttempts) {
+                        console.log(`Retry attempt ${attempt + 1} for ${type}...`);
+                        setTimeout(() => {
+                            this.syncWithRetry(sheetsUrl, payload, type, attempt + 1);
+                        }, 1000 * attempt);
+                    } else {
+                        console.log(`✗ Sheets sync failed after ${maxAttempts} attempts:`, e);
+                    }
+                });
             },
 
             getCurrentDimension() {
@@ -1192,7 +1545,8 @@
                     id: 'RESP-' + Date.now(),
                     responses: [...this.responses],
                     results: results,
-                    timestamp: new Date().toLocaleString()
+                    timestamp: new Date().toLocaleString(),
+                    registration: this.currentRegistration
                 };
 
                 this.allResponses.push(response);
@@ -1214,7 +1568,12 @@
                 }
 
                 const payload = {
+                    type: 'survey',
                     responseId: response.id,
+                    fullName: response.registration.fullName,
+                    emailId: response.registration.emailId,
+                    tenure: response.registration.tenure,
+                    totalExperience: response.registration.totalExperience,
                     overallScore: response.results.overallScore,
                     readinessLevel: response.results.readinessLevel,
                     timestamp: response.timestamp,
@@ -1222,15 +1581,7 @@
                     allResponses: response.responses
                 };
 
-                fetch(sheetsUrl, {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    mode: 'no-cors'
-                }).then(() => {
-                    console.log('Data synced to Google Sheets');
-                }).catch(e => {
-                    console.log('Sheets sync error:', e);
-                });
+                this.syncWithRetry(sheetsUrl, payload, 'survey response');
             },
 
             calculateResults() {
@@ -1356,11 +1707,41 @@
                         <button class="btn-export primary" onclick="app.downloadPDFReport('${response.id}')">📄 Download PDF Report</button>
                         <button class="btn-export" onclick="app.exportResultsAsJSON()">📥 Download Report (JSON)</button>
                         <button class="btn-export" onclick="app.printResults()">🖨️ Print Results</button>
-                        <button class="btn-export" onclick="app.startNewSurvey()">🔄 Take Survey Again</button>
+                        <button class="btn-export" onclick="app.restartSurvey()">🔄 Take Survey Again</button>
                     </div>
                 `;
 
                 document.getElementById('resultsContent').innerHTML = html;
+            },
+
+            restartSurvey() {
+                document.getElementById('fullName').value = '';
+                document.getElementById('emailId').value = '';
+                document.getElementById('tenure').value = '';
+                document.getElementById('totalExperience').value = '';
+                this.currentRegistration = null;
+                this.startSurvey();
+            },
+
+            waitForJsPDF(maxAttempts = 6, attempt = 0) {
+                return new Promise((resolve, reject) => {
+                    if (window.jspdf && window.jspdf.jsPDF) {
+                        console.log('✓ jsPDF library loaded successfully');
+                        resolve();
+                        return;
+                    }
+                    
+                    if (attempt >= maxAttempts) {
+                        console.error('✗ jsPDF library timeout after ' + (attempt * 500) + 'ms');
+                        reject(new Error('jsPDF library timeout'));
+                        return;
+                    }
+                    
+                    console.log(`Waiting for jsPDF library... (attempt ${attempt + 1}/${maxAttempts})`);
+                    setTimeout(() => {
+                        this.waitForJsPDF(maxAttempts, attempt + 1).then(resolve).catch(reject);
+                    }, 500);
+                });
             },
 
             downloadPDFReport(responseId) {
@@ -1370,69 +1751,144 @@
                     return;
                 }
 
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-                    const pageHeight = doc.internal.pageSize.getHeight();
-                    let yPosition = 20;
+                const btn = event.target;
+                btn.textContent = '⏳ Generating PDF...';
+                btn.disabled = true;
 
-                    doc.setFontSize(20);
-                    doc.setTextColor(0, 240, 255);
-                    doc.text('AI Instinct Index Report', 20, yPosition);
+                this.waitForJsPDF()
+                    .then(() => {
+                        try {
+                            const { jsPDF } = window.jspdf;
+                            const doc = new jsPDF();
+                            const pageHeight = doc.internal.pageSize.getHeight();
+                            const pageWidth = doc.internal.pageSize.getWidth();
+                            let yPosition = 20;
 
-                    yPosition += 12;
-                    doc.setFontSize(10);
-                    doc.setTextColor(180, 180, 190);
-                    doc.text(`Response ID: ${response.id}`, 20, yPosition);
-                    yPosition += 7;
-                    doc.text(`Date: ${response.timestamp}`, 20, yPosition);
+                            // Title
+                            doc.setFontSize(20);
+                            doc.setTextColor(0, 240, 255);
+                            doc.text('AI Instinct Index Report', 20, yPosition);
 
-                    yPosition += 12;
-                    doc.setFontSize(16);
-                    doc.setTextColor(0, 240, 255);
-                    doc.text(`Score: ${response.results.overallScore}/100`, 20, yPosition);
+                            // Header Info
+                            yPosition += 12;
+                            doc.setFontSize(10);
+                            doc.setTextColor(180, 180, 190);
+                            doc.text(`Response ID: ${response.id}`, 20, yPosition);
+                            yPosition += 7;
+                            doc.text(`Name: ${response.registration.fullName}`, 20, yPosition);
+                            yPosition += 7;
+                            doc.text(`Email: ${response.registration.emailId}`, 20, yPosition);
+                            yPosition += 7;
+                            doc.text(`Tenure: ${response.registration.tenure} yrs | Experience: ${response.registration.totalExperience} yrs`, 20, yPosition);
+                            yPosition += 7;
+                            doc.text(`Date: ${response.timestamp}`, 20, yPosition);
 
-                    yPosition += 10;
-                    doc.setFontSize(12);
-                    doc.setTextColor(response.results.readinessLevel === 'Strong' ? 0 : 255, 240, 255);
-                    doc.text(`Readiness: ${response.results.readinessLevel}`, 20, yPosition);
+                            // Overall Score
+                            yPosition += 12;
+                            doc.setFontSize(16);
+                            doc.setTextColor(0, 240, 255);
+                            doc.text(`Score: ${response.results.overallScore}/100`, 20, yPosition);
 
-                    yPosition += 15;
-                    doc.setFontSize(12);
-                    doc.setTextColor(0, 240, 255);
-                    doc.text('Dimension Scores:', 20, yPosition);
+                            // Readiness Level
+                            yPosition += 10;
+                            doc.setFontSize(12);
+                            doc.setTextColor(response.results.readinessLevel === 'Strong' ? 0 : 255, 240, 255);
+                            doc.text(`Readiness: ${response.results.readinessLevel}`, 20, yPosition);
 
-                    yPosition += 10;
-                    doc.setFontSize(9);
-                    doc.setTextColor(180, 180, 190);
+                            // Dimension Scores Section
+                            yPosition += 15;
+                            doc.setFontSize(12);
+                            doc.setTextColor(0, 240, 255);
+                            doc.text('Behavioral Dimension Scores:', 20, yPosition);
 
-                    response.results.dimensionScores.forEach(dimension => {
-                        if (yPosition > pageHeight - 15) {
-                            doc.addPage();
-                            yPosition = 20;
+                            yPosition += 10;
+                            doc.setFontSize(9);
+                            doc.setTextColor(180, 180, 190);
+
+                            response.results.dimensionScores.forEach((dimension, idx) => {
+                                // Auto page break if too close to bottom
+                                if (yPosition > pageHeight - 20) {
+                                    doc.addPage();
+                                    yPosition = 20;
+                                    // Repeat header on new page
+                                    doc.setFontSize(12);
+                                    doc.setTextColor(0, 240, 255);
+                                    doc.text('Behavioral Dimension Scores (continued):', 20, yPosition);
+                                    yPosition += 10;
+                                    doc.setFontSize(9);
+                                    doc.setTextColor(180, 180, 190);
+                                }
+                                
+                                const scoreText = `${idx + 1}. ${dimension.name}: ${dimension.score}/100`;
+                                doc.text(scoreText, 25, yPosition);
+                                yPosition += 6;
+                            });
+
+                            // Footer
+                            yPosition += 10;
+                            doc.setFontSize(8);
+                            doc.setTextColor(100, 100, 100);
+                            doc.text('This report was generated by the AI Instinct Index Assessment Tool', 20, yPosition);
+
+                            // Save
+                            doc.save(`AI-Instinct-Report-${response.id}.pdf`);
+                            console.log('✓ PDF generated successfully: ' + response.id);
+                            btn.textContent = '📄 Download PDF Report';
+                            btn.disabled = false;
+                        } catch (e) {
+                            console.error('✗ PDF generation error:', e);
+                            btn.textContent = '📄 Download PDF Report';
+                            btn.disabled = false;
+                            this.fallbackDownload(response);
                         }
-                        doc.text(`${dimension.name}: ${dimension.score}/100`, 25, yPosition);
-                        yPosition += 6;
+                    })
+                    .catch(err => {
+                        console.error('✗ Failed to load jsPDF:', err);
+                        btn.textContent = '📄 Download PDF Report';
+                        btn.disabled = false;
+                        this.fallbackDownload(response);
                     });
-
-                    doc.save(`AI-Instinct-Report-${response.id}.pdf`);
-                } catch (e) {
-                    this.fallbackDownload(response);
-                }
             },
 
             fallbackDownload(response) {
-                let content = 'AI INSTINCT INDEX REPORT\n\n';
-                content += `Response ID: ${response.id}\n`;
-                content += `Date: ${response.timestamp}\n\n`;
-                content += `OVERALL SCORE: ${response.results.overallScore}/100\n`;
-                content += `READINESS LEVEL: ${response.results.readinessLevel}\n\n`;
-                content += `DIMENSION SCORES:\n`;
-                content += '='.repeat(50) + '\n\n';
+                const line = '='.repeat(60);
+                let content = `
+${line}
+AI INSTINCT INDEX - PROFESSIONAL REPORT
+${line}
 
-                response.results.dimensionScores.forEach(d => {
-                    content += `${d.name}: ${d.score}/100\n`;
+PARTICIPANT INFORMATION
+${line}
+Response ID:          ${response.id}
+Participant Name:     ${response.registration.fullName}
+Email:                ${response.registration.emailId}
+Tenure (Current Role): ${response.registration.tenure} years
+Total Work Experience: ${response.registration.totalExperience} years
+Assessment Date:      ${response.timestamp}
+
+${line}
+OVERALL ASSESSMENT RESULTS
+${line}
+AI Instinct Index Score: ${response.results.overallScore}/100
+Behavioral Readiness:    ${response.results.readinessLevel}
+
+${line}
+BEHAVIORAL DIMENSION BREAKDOWN
+${line}
+
+`;
+
+                response.results.dimensionScores.forEach((d, idx) => {
+                    const barLength = Math.round(d.score / 5);
+                    const bar = '█'.repeat(barLength) + '░'.repeat(20 - barLength);
+                    content += `\n${idx + 1}. ${d.name}\n`;
+                    content += `   Score: ${d.score}/100\n`;
+                    content += `   Progress: [${bar}]\n`;
                 });
+
+                content += `\n${line}\n`;
+                content += 'Generated by AI Instinct Index Assessment Tool\n';
+                content += `${line}\n`;
 
                 const blob = new Blob([content], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
@@ -1440,6 +1896,7 @@
                 link.href = url;
                 link.download = `AI-Instinct-Report-${response.id}.txt`;
                 link.click();
+                console.log('✓ Fallback TXT report downloaded: ' + response.id);
             },
 
             exportResultsAsJSON() {
@@ -1462,6 +1919,7 @@
             },
 
             startNewSurvey() {
+                this.currentRegistration = null;
                 this.startSurvey();
             },
 
@@ -1501,9 +1959,11 @@
                 let html = '';
                 this.allResponses.forEach(response => {
                     const badgeClass = response.results.readinessLevel.toLowerCase() === 'strong' ? 'strong' : (response.results.readinessLevel.toLowerCase() === 'moderate' ? 'medium' : 'weak');
+                    const userName = response.registration ? response.registration.fullName : 'Unknown';
                     html += `
                         <tr>
                             <td>${response.id}</td>
+                            <td>${userName}</td>
                             <td><strong>${response.results.overallScore}/100</strong></td>
                             <td><span class="strength-badge strength-${badgeClass}">${response.results.readinessLevel}</span></td>
                             <td>${response.timestamp}</td>
@@ -1511,7 +1971,7 @@
                         </tr>
                     `;
                 });
-                document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="5" style="text-align: center; color: #b4b4be;">No responses yet</td></tr>';
+                document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="6" style="text-align: center; color: #b4b4be;">No responses yet</td></tr>';
             },
 
             renderGroupReport() {
@@ -1560,10 +2020,28 @@
             },
 
             syncToGoogleSheets() {
-                alert('Syncing all responses to Google Sheets...');
+                if (this.allResponses.length === 0) {
+                    alert('No responses to sync');
+                    return;
+                }
+                
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '⏳ Syncing...';
+                btn.disabled = true;
+
+                let synced = 0;
                 this.allResponses.forEach(response => {
                     this.sendToGoogleSheets(response);
+                    synced++;
                 });
+
+                setTimeout(() => {
+                    alert(`✓ Synced ${synced} responses to Google Sheets. Check your sheet for data.`);
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    this.refreshAdminDashboard();
+                }, 1500);
             },
 
             exportDataAsCSV() {
@@ -1611,6 +2089,21 @@
                 link.href = url;
                 link.download = 'ai-instinct-group-report.csv';
                 link.click();
+            },
+
+            resetSurvey() {
+                if (confirm('Delete ALL survey responses AND registrations? This cannot be undone.')) {
+                    this.allResponses = [];
+                    this.allRegistrations = [];
+                    this.saveResponses();
+                    this.saveRegistrations();
+                    this.currentQuestion = 0;
+                    this.responses = new Array(this.getTotalQuestions()).fill(undefined);
+                    this.currentRegistration = null;
+                    this.updateBadges();
+                    this.refreshAdminDashboard();
+                    alert('All survey and registration data cleared.');
+                }
             },
 
             clearAllData() {
