@@ -1,2123 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Instinct Index - Behavioral Readiness Survey</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AI Instinct Index | Behavioral Diagnostic</title>
 
+    <!-- External libs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap');
+        :root {
+            --brand-cyan: #00f0ff;
+            --brand-teal: #2dd4bf;
+            --deep-slate: #0f172a;
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #121423 0%, #0a0d15 100%);
-            color: #f5f5f5;
-            line-height: 1.6;
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0f172a 100%);
+            color: #f1f5f9;
             min-height: 100vh;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            border-bottom: 2px solid #00f0ff;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #00f0ff;
-            margin-bottom: 10px;
-            font-weight: 900;
-        }
-
-        .tagline {
-            color: #b4b4be;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .mode-selector {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .mode-btn {
-            padding: 12px 30px;
-            border: 2px solid #00f0ff;
-            background-color: transparent;
-            color: #00f0ff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .mode-btn:hover {
-            background-color: #00f0ff;
-            color: #121423;
-        }
-
-        .mode-btn.active {
-            background-color: #00f0ff;
-            color: #121423;
-        }
-
-        .badge {
-            display: none;
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #ff0078;
-            color: #f5f5f5;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            line-height: 24px;
-            text-align: center;
-            animation: pulse 2s infinite;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        .survey-container {
-            background-color: #1e2332;
-            border: 2px solid #00f0ff;
-            padding: 40px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .progress-section {
-            margin-bottom: 30px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .progress-text {
-            color: #b4b4be;
-            font-size: 0.95rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #2a2f40;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00f0ff, #ff0078);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .dimension-header {
-            background-color: #0a0d15;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00f0ff;
-            border-radius: 4px;
-        }
-
-        .dimension-name {
-            color: #00f0ff;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .dimension-description {
-            color: #b4b4be;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .question-text {
-            color: #f5f5f5;
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .likert-scale {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .likert-option {
-            flex: 1;
-            min-width: 60px;
-            padding: 12px 8px;
-            text-align: center;
-            border: 2px solid #2a2f40;
-            background-color: #1a1f2e;
-            color: #b4b4be;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .likert-option:hover {
-            border-color: #00f0ff;
-            background-color: #2a2f40;
-            color: #00f0ff;
-        }
-
-        .likert-option.selected {
-            background-color: #00f0ff;
-            color: #121423;
-            border-color: #00f0ff;
-        }
-
-        .likert-label {
-            display: block;
-            font-size: 0.7rem;
-            margin-top: 5px;
-            color: #94a3b8;
-        }
-
-        .survey-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: space-between;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .btn-nav, .btn-submit {
-            padding: 12px 30px;
-            border: 2px solid #00f0ff;
-            background-color: transparent;
-            color: #00f0ff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-nav:hover, .btn-nav:disabled {
-            background-color: #00f0ff;
-            color: #121423;
-        }
-
-        .btn-nav:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-submit {
-            border-color: #ff0078;
-            color: #ff0078;
-        }
-
-        .btn-submit:hover {
-            background-color: #ff0078;
-            color: #f5f5f5;
-        }
-
-        .results-container {
-            background-color: #1e2332;
-            border: 2px solid #ff0078;
-            padding: 40px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .thank-you-box {
-            background: linear-gradient(135deg, #00f0ff 0%, #ff0078 100%);
-            padding: 40px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #121423;
-        }
-
-        .thank-you-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .score-number {
-            font-size: 3rem;
-            font-weight: 900;
-            margin: 20px 0;
-        }
-
-        .score-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .readiness-classification {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .response-info {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            font-size: 0.95rem;
-        }
-
-        .dimension-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .dimension-card {
-            background-color: #1a1f2e;
-            border-left: 4px solid #00f0ff;
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        .dimension-card.medium {
-            border-left-color: #ffd700;
-        }
-
-        .dimension-card.weak {
-            border-left-color: #ff4444;
-        }
-
-        .dimension-title {
-            color: #00f0ff;
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .dimension-card.medium .dimension-title {
-            color: #ffd700;
-        }
-
-        .dimension-card.weak .dimension-title {
-            color: #ff4444;
-        }
-
-        .score-text {
-            color: #f5f5f5;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .score-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #2a2f40;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .score-fill {
-            height: 100%;
-            background-color: #00f0ff;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .dimension-card.medium .score-fill {
-            background-color: #ffd700;
-        }
-
-        .dimension-card.weak .score-fill {
-            background-color: #ff4444;
-        }
-
-        .dimension-recommendation {
-            color: #b4b4be;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-top: 15px;
-        }
-
-        .export-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .btn-export {
-            padding: 12px 30px;
-            border: 2px solid #00f0ff;
-            background-color: transparent;
-            color: #00f0ff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-export:hover {
-            background-color: #00f0ff;
-            color: #121423;
-        }
-
-        .btn-export.primary {
-            border-color: #ff0078;
-            color: #ff0078;
-        }
-
-        .btn-export.primary:hover {
-            background-color: #ff0078;
-            color: #f5f5f5;
-        }
-
-        .admin-container {
-            background-color: #1e2332;
-            border: 2px solid #00f0ff;
-            padding: 40px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-box {
-            background-color: #1a1f2e;
-            padding: 20px;
-            border-radius: 4px;
-            text-align: center;
-            border: 2px solid #00f0ff;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #00f0ff;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            color: #b4b4be;
-            font-size: 0.9rem;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-            background-color: #1a1f2e;
-            border: 1px solid #2a2f40;
-        }
-
-        .data-table th {
-            background-color: #0a0d15;
-            color: #00f0ff;
-            padding: 15px;
-            text-align: left;
-            font-weight: 700;
-            border-bottom: 2px solid #00f0ff;
-        }
-
-        .data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #2a2f40;
-            color: #f5f5f5;
-        }
-
-        .data-table tr:hover {
-            background-color: #2a2f40;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            background-color: #1a1f2e;
-            border: 2px solid #2a2f40;
-            color: #f5f5f5;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #00f0ff;
-        }
-
-        .home-intro {
-            text-align: center;
-        }
-
-        .home-intro h2 {
-            color: #00f0ff;
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-
-        .intro-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .intro-card {
-            background-color: #1a1f2e;
-            padding: 20px;
-            border-radius: 4px;
-            border-left: 4px solid #00f0ff;
-        }
-
-        .intro-number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #00f0ff;
-            margin: 10px 0;
-        }
-
-        .intro-text {
-            color: #b4b4be;
-            margin-top: 10px;
-        }
-
-        .dimensions-list {
-            text-align: left;
-            background-color: #1a1f2e;
-            padding: 20px;
-            border-radius: 4px;
-            border-left: 4px solid #00f0ff;
-        }
-
-        .dimensions-list p {
-            color: #f5f5f5;
-            margin-bottom: 10px;
-        }
-
-        .dimensions-list strong {
-            color: #00f0ff;
-        }
-
-        .start-button {
-            margin-top: 40px;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-color: #ff0078;
-            color: #ff0078;
-        }
-
-        .report-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            border: 2px solid #00f0ff;
-            background-color: transparent;
-            color: #00f0ff;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background-color: #00f0ff;
-            color: #121423;
-        }
-
-        .report-section {
-            display: none;
-        }
-
-        .report-section.active {
-            display: block;
-        }
-
-        .dimension-comparison {
-            background-color: #1a1f2e;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #2a2f40;
-        }
-
-        .comparison-label {
-            color: #00f0ff;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .comparison-value {
-            color: #f5f5f5;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            padding: 10px 20px;
-            border: 2px solid #ff4444;
-            background-color: transparent;
-            color: #ff4444;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        .logout-btn:hover {
-            background-color: #ff4444;
-            color: #f5f5f5;
-        }
-
-        .strength-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin: 6px 6px 6px 0;
-        }
-
-        .strength-strong {
-            background-color: rgba(0, 240, 255, 0.2);
-            color: #00f0ff;
-            border: 1px solid #00f0ff;
-        }
-
-        .strength-medium {
-            background-color: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-            border: 1px solid #ffd700;
-        }
-
-        .strength-weak {
-            background-color: rgba(255, 68, 68, 0.2);
-            color: #ff4444;
-            border: 1px solid #ff4444;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: #1e2332;
-            border: 2px solid #00f0ff;
-            padding: 40px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-header {
-            color: #00f0ff;
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .modal-subtitle {
-            color: #b4b4be;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            color: #b4b4be;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            background-color: #1a1f2e;
-            border: 2px solid #2a2f40;
-            color: #f5f5f5;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #00f0ff;
-        }
-
-        .btn-register {
-            width: 100%;
-            padding: 12px;
-            background-color: #00f0ff;
-            color: #121423;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .btn-register:hover {
-            background-color: #00d9e8;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-        }
-
-        .user-info-bar {
-            background-color: #0a0d15;
-            padding: 12px 20px;
-            border-bottom: 2px solid #00f0ff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .user-name {
-            color: #00f0ff;
-            font-weight: 600;
-        }
-
-        .user-tenure {
-            color: #b4b4be;
-            font-size: 0.9rem;
-        }
-
-        @keyframes pulse {
-
-        .strength-weak {
-            background-color: rgba(255, 68, 68, 0.2);
-            color: #ff4444;
-            border: 1px solid #ff4444;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: #1e2332;
-            border: 2px solid #00f0ff;
-            padding: 40px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-header {
-            color: #00f0ff;
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .modal-subtitle {
-            color: #b4b4be;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            color: #b4b4be;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            background-color: #1a1f2e;
-            border: 2px solid #2a2f40;
-            color: #f5f5f5;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #00f0ff;
-        }
-
-        .btn-register {
-            width: 100%;
-            padding: 12px;
-            background-color: #00f0ff;
-            color: #121423;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .btn-register:hover {
-            background-color: #00d9e8;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-        }
-
-        .user-info-bar {
-            background-color: #0a0d15;
-            padding: 12px 20px;
-            border-bottom: 2px solid #00f0ff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .user-name {
-            color: #00f0ff;
-            font-weight: 600;
-        }
-
-        .user-tenure {
-            color: #b4b4be;
-            font-size: 0.9rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.15);
-            }
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .survey-container, .results-container, .admin-container {
-                padding: 20px;
-            }
-
-            .likert-option {
-                min-width: 50px;
-                padding: 8px 4px;
-                font-size: 0.75rem;
-            }
-
-            .likert-label {
-                font-size: 0.6rem;
-            }
-
-            .dimension-results {
-                grid-template-columns: 1fr;
-            }
-
-            .admin-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .export-buttons {
-                flex-direction: column;
-            }
-
-            .btn-export {
-                width: 100%;
-            }
-        }
+        .serif { font-family: 'Libre Baskerville', serif; }
+        .glass-card {
+            background: rgba(30,41,59,0.75);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        }
+        .title-ai { color: #fff; }
+        .title-instinct { color: var(--brand-cyan); }
+        .title-index { color: var(--brand-teal); }
+        .likert-btn {
+            background: rgba(15,23,42,0.6);
+            border: 2px solid rgba(255,255,255,0.04);
+            transition: all .18s;
+        }
+        .likert-btn.selected {
+            background: var(--brand-cyan);
+            border-color: var(--brand-cyan);
+            color: #000;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,240,255,0.18);
+        }
+        .pips-container { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:1rem; }
+        .pip { width:6px; height:6px; border-radius:999px; background:#334155; transition:all .18s; }
+        .pip.active { background:var(--brand-cyan); transform:scale(1.25); box-shadow:0 0 8px var(--brand-cyan); }
+        .pip.completed { background:var(--brand-teal); opacity:0.6; }
+        .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.9); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:1000; }
+        #chart-buffer { position:absolute; left:-9999px; visibility:hidden; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🧠 AI Instinct Index</h1>
-            <p class="tagline">Measure Your Organization's AI Adoption Behavioral Readiness</p>
-            <p style="color: #94a3b8; font-size: 0.95rem;">68 Questions | 11 Behavioral Dimensions | 15-20 Minutes</p>
-        </header>
-
-        <div class="mode-selector">
-            <button class="mode-btn active" data-mode="home" onclick="app.switchMode(event)">Home</button>
-            <button class="mode-btn" data-mode="survey" onclick="app.startSurvey()">
-                Take Survey
-                <span class="badge" id="surveyBadge">New</span>
-            </button>
-            <button class="mode-btn" data-mode="admin" onclick="app.switchMode(event)">
-                Admin Dashboard
-                <span class="badge" id="adminBadge">📊</span>
-            </button>
-        </div>
-
-        <!-- HOME SECTION -->
-        <div id="home" class="section active">
-            <div class="survey-container home-intro">
-                <h2>Welcome to AI Instinct Index</h2>
-                <p style="color: #b4b4be; font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;">
-                    This comprehensive assessment measures behavioral readiness across 11 critical dimensions of AI adoption.<br>
-                    Your responses will generate personalized insights and organizational benchmarks.
-                </p>
-                
-                <div class="intro-grid">
-                    <div class="intro-card">
-                        <div class="intro-number">68</div>
-                        <div class="intro-text">Research-Backed Questions</div>
-                    </div>
-                    <div class="intro-card" style="border-left-color: #ff0078;">
-                        <div class="intro-number" style="color: #ff0078;">11</div>
-                        <div class="intro-text">Behavioral Dimensions</div>
-                    </div>
-                    <div class="intro-card">
-                        <div class="intro-number">15 min</div>
-                        <div class="intro-text">Completion Time</div>
-                    </div>
-                </div>
-
-                <h3 style="color: #00f0ff; margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem;">The 11 Behavioral Dimensions</h3>
-                <div class="dimensions-list">
-                    <p><strong>1. Exploration (Try)</strong> - Willingness to experiment and learn</p>
-                    <p><strong style="color: #ff0078;">2. Persistence (Sustain)</strong> - Resilience and follow-through</p>
-                    <p><strong>3. Integration (Normalize)</strong> - Ethical and responsible use</p>
-                    <p><strong style="color: #ff0078;">4. Influence (Scale)</strong> - Knowledge sharing and peer support</p>
-                    <p><strong>5. Psychological Barriers</strong> - Fear, anxiety, insecurity</p>
-                    <p><strong style="color: #ff0078;">6. Digital Temperament</strong> - Technology comfort</p>
-                    <p><strong>7. Trust & Explainability</strong> - Confidence in AI systems</p>
-                    <p><strong style="color: #ff0078;">8. Leadership & Change Management</strong> - Executive modeling</p>
-                    <p><strong>9. Policy & Communication</strong> - Clear guidance and communication</p>
-                    <p><strong style="color: #ff0078;">10. Benefit Realization</strong> - Visible AI impact</p>
-                    <p><strong>11. Adoption Stage & Barriers</strong> - Current phase and scaling readiness</p>
-                </div>
-
-                <button class="btn-export start-button" onclick="app.startSurvey()">
-                    ▶ Start Survey Now
-                </button>
-                <p style="color: #94a3b8; margin-top: 20px; font-size: 0.9rem;">Click above or use the "Take Survey" button at the top to begin</p>
+    <nav class="border-b border-white/5 bg-slate-900/80 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="app.navigate('hero')">
+                <span class="font-black text-lg tracking-widest uppercase">
+                    <span class="title-ai">AI</span> <span class="title-instinct italic serif">Instinct</span> <span class="title-index">Index</span>
+                </span>
             </div>
+            <div id="nav-actions" class="flex items-center space-x-6"></div>
         </div>
+    </nav>
 
-        <!-- REGISTRATION MODAL -->
-        <div id="registrationModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">📝 Register</div>
-                <div class="modal-subtitle">Please provide your details before starting the survey</div>
-                
-                <div class="form-group">
-                    <label class="form-label">Full Name *</label>
-                    <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
-                </div>
+    <main id="view-port" class="max-w-6xl mx-auto px-4 py-12"></main>
 
-                <div class="form-group">
-                    <label class="form-label">Email ID *</label>
-                    <input type="email" id="emailId" class="form-input" placeholder="Enter your email address" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tenure at Current Role (Years) *</label>
-                    <input type="number" id="tenure" class="form-input" placeholder="e.g., 2.5" min="0" step="0.5" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Total Work Experience (Years) *</label>
-                    <input type="number" id="totalExperience" class="form-input" placeholder="e.g., 8" min="0" step="0.5" required>
-                </div>
-
-                <button class="btn-register" onclick="app.submitRegistration()">Start Survey →</button>
-            </div>
-        </div>
-
-        <!-- SURVEY SECTION -->
-        <div id="survey" class="section">
-            <div class="survey-container">
-                <div id="userInfoBar" style="display: none;">
-                    <div class="user-name" id="userNameDisplay"></div>
-                    <div class="user-tenure" id="userDetailsDisplay"></div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-header">
-                        <span class="progress-text" id="progressText">Question 1 of 68</span>
-                        <span class="progress-text" id="currentDimension"></span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                </div>
-                <div id="surveyContent"></div>
-                <div class="survey-buttons">
-                    <button class="btn-nav" onclick="app.previousQuestion()" id="btnPrev" style="display: none;">← Previous</button>
-                    <button class="btn-nav" onclick="app.nextQuestion()" id="btnNext" style="display: none;">Next →</button>
-                    <button class="btn-submit" onclick="app.submitSurvey()" id="btnSubmit" style="display: none;">Submit Survey ✓</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- RESULTS SECTION -->
-        <div id="results" class="section">
-            <div class="results-container" id="resultsContent"></div>
-        </div>
-
-        <!-- ADMIN SECTION -->
-        <div id="admin" class="section">
-            <div class="admin-container">
-                <h2 style="color: #00f0ff; margin-bottom: 30px; font-size: 2rem;">Admin Dashboard</h2>
-                
-                <div id="adminLoginForm">
-                    <label for="adminPassword" style="color: #b4b4be;">Admin Password:</label>
-                    <input type="password" id="adminPassword" class="input-field" placeholder="Enter admin password">
-                    <label for="sheetsUrl" style="color: #b4b4be; display: block; margin-top: 15px;">Google Sheets Integration URL:</label>
-                    <input type="text" id="sheetsUrl" class="input-field" placeholder="https://script.google.com/macros/d/YOUR_SCRIPT_ID/usercallback" value="https://script.google.com/macros/s/AKfycbxI6UyeeR3ruVxK6JrkNu2cd_e4jmB2ZUXAeB1b5FztBnuYfErHik0ZHsJad8r7OwA-cA/exec">
-                    <button class="btn-nav" onclick="app.unlockAdmin()" style="width: 100%; margin-top: 10px;">Unlock Dashboard</button>
-                </div>
-
-                <div id="adminContent" style="display: none;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <h3 style="color: #00f0ff;">Dashboard</h3>
-                        <button class="logout-btn" onclick="app.logoutAdmin()">🚪 Logout</button>
-                    </div>
-
-                    <div class="admin-grid">
-                        <div class="stat-box">
-                            <div style="color: #00f0ff; font-weight: 700;">Total Responses</div>
-                            <div class="stat-number" id="totalResponses">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div style="color: #ff0078; font-weight: 700;">Avg. Overall Score</div>
-                            <div class="stat-number" id="avgScore">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div style="color: #00f0ff; font-weight: 700;">Completion Rate</div>
-                            <div class="stat-number" id="completionRate">0%</div>
-                        </div>
-                    </div>
-
-                    <div class="report-tabs">
-                        <button class="tab-btn active" onclick="app.switchReportTab('individual', this)">📊 Individual Reports</button>
-                        <button class="tab-btn" onclick="app.switchReportTab('group', this)">👥 Group Report</button>
-                    </div>
-
-                    <div id="individual" class="report-section active">
-                        <h3 style="color: #00f0ff; margin-bottom: 20px;">Individual Response Reports</h3>
-                        <div style="overflow-x: auto;">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Response ID</th>
-                                        <th>Name</th>
-                                        <th>Overall Score</th>
-                                        <th>Readiness Level</th>
-                                        <th>Timestamp</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="group" class="report-section">
-                        <h3 style="color: #00f0ff; margin-bottom: 20px;">Group Performance Analysis</h3>
-                        <div id="groupReportContent"></div>
-                    </div>
-
-                    <div class="export-buttons">
-                        <button class="btn-export" onclick="app.syncToGoogleSheets()">☁️ Sync to Google Sheets</button>
-                        <button class="btn-export" onclick="app.exportDataAsCSV()">📊 Export as CSV</button>
-                        <button class="btn-export" onclick="app.exportGroupReport()">📈 Export Group Report</button>
-                        <button class="btn-export" onclick="app.resetSurvey()" style="border-color: #ffd700; color: #ffd700;">🔄 Reset Survey</button>
-                        <button class="btn-export" onclick="app.clearAllData()" style="border-color: #ff4444; color: #ff4444;">🗑️ Clear All Data</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="chart-buffer"><canvas id="radar-canvas" width="1000" height="1000"></canvas></div>
 
     <script>
-        const ADMIN_PASSWORD = 'admin123';
-        const DEFAULT_WEBHOOK = 'https://script.google.com/macros/s/AKfycbxI6UyeeR3ruVxK6JrkNu2cd_e4jmB2ZUXAeB1b5FztBnuYfErHik0ZHsJad8r7OwA-cA/exec';
+    /* ===========================
+       Data: 11 dimensions + 68 questions
+       =========================== */
+    const CONFIG = { ADMIN_PASS: "admin1510" };
 
-        const surveyQuestions = [
-            {
-                dimension: "1. EXPLORATION (Try)",
-                description: "Willingness to experiment and learn",
-                questions: [
-                    "I actively seek out new technology tools and experiment with them in my work.",
-                    "I volunteer for pilot programs or testing of new AI tools without being mandated.",
-                    "When a new AI tool or feature becomes available, I am curious and willing to try it quickly.",
-                    "I am comfortable learning new AI tools even if I do not receive detailed step-by-step instructions.",
-                    "I frequently participate in optional AI or technology training offered by my organization.",
-                    "I prefer to update my ways of working when new AI-based methods are available, rather than stick to traditional methods."
-                ]
-            },
-            {
-                dimension: "2. PERSISTENCE (Sustain)",
-                description: "Resilience and follow-through",
-                questions: [
-                    "I usually complete AI-related training programs once I start them.",
-                    "When I face errors or difficulties with an AI tool, I persist until I figure out how to overcome them.",
-                    "I am willing to try an AI tool again even if my first experience with it was frustrating.",
-                    "My use of AI tools remains consistent beyond the first few weeks of introduction.",
-                    "I continue to explore new features and capabilities of AI tools after initial deployment.",
-                    "I see challenges with AI tools as opportunities to build my skills, not reasons to give up."
-                ]
-            },
-            {
-                dimension: "3. INTEGRATION (Normalize)",
-                description: "Ethical and responsible use",
-                questions: [
-                    "I consciously think about ethical implications when using AI in my work.",
-                    "I follow my organization's data governance and privacy policies when using AI tools.",
-                    "I consider the wider impact on colleagues, customers, or stakeholders before automating a task with AI.",
-                    "I avoid bypassing rules or governance processes just to get faster results with AI.",
-                    "I find my organization's AI policies clear and easy to follow in day-to-day work.",
-                    "I receive enough guidance or training on how to use AI responsibly in my role."
-                ]
-            },
-            {
-                dimension: "4. INFLUENCE (Scale)",
-                description: "Knowledge sharing and peer support",
-                questions: [
-                    "I have helped colleagues learn how to use AI tools.",
-                    "My peers often approach me with questions about how to use AI in their work.",
-                    "There are active internal groups, channels, or communities where people share AI use cases in my organization.",
-                    "Successful AI use cases from one team are regularly shared with other teams.",
-                    "There are visible internal champions who advocate for AI adoption in my organization.",
-                    "I actively encourage others to experiment with AI tools and share my experiences."
-                ]
-            },
-            {
-                dimension: "5. PSYCHOLOGICAL BARRIERS",
-                description: "Fear, anxiety, insecurity",
-                questions: [
-                    "I rarely worry that AI will replace my job in the near future.",
-                    "AI tools have not significantly increased my stress or anxiety at work.",
-                    "I am comfortable using AI for core, important tasks in my role.",
-                    "I do not feel that using AI makes me look lazy or less hardworking.",
-                    "I do not worry that relying on AI will make others see me as a fraud or less capable.",
-                    "I feel confident that if AI makes a mistake, it does not automatically make me look incompetent."
-                ]
-            },
-            {
-                dimension: "6. DIGITAL TEMPERAMENT",
-                description: "Technology comfort and ambiguity tolerance",
-                questions: [
-                    "I feel comfortable working with technology that is new, uncertain, or still evolving.",
-                    "In the past, I have generally embraced new tools and systems introduced at work.",
-                    "I can manage any anxiety I feel when learning new AI technologies.",
-                    "The training and support I receive matches my level of comfort with digital tools.",
-                    "I am comfortable working with AI systems that provide probabilistic or non-deterministic outputs.",
-                    "I do not need technology to be perfectly predictable in order to trust and use it."
-                ]
-            },
-            {
-                dimension: "7. TRUST & EXPLAINABILITY",
-                description: "Confidence in AI systems",
-                questions: [
-                    "I have a basic understanding of how the AI tools I use arrive at their outputs or recommendations.",
-                    "My organization communicates clearly about the limitations and possible errors of AI systems.",
-                    "When I see an AI system make a mistake, I still remain open to using it with proper safeguards.",
-                    "I trust AI tools to support important decisions in my work, with appropriate human oversight.",
-                    "I can access performance metrics or feedback that show how well AI tools are working over time.",
-                    "I am willing to use AI not just for simple factual lookups, but also for more strategic or complex tasks when appropriate."
-                ]
-            },
-            {
-                dimension: "8. LEADERSHIP & CHANGE MANAGEMENT",
-                description: "Executive modeling and support",
-                questions: [
-                    "Senior leaders in my organization visibly use AI tools in their own work.",
-                    "What leaders say about AI strategy matches what I experience in my daily work.",
-                    "Leaders openly talk about their own learning journey with AI, including their challenges.",
-                    "AI initiatives are clearly championed by the C-suite or top management.",
-                    "There is a structured change management plan to support AI adoption in my organization.",
-                    "Employees are encouraged to experiment with AI and learn from mistakes, not just to comply with rules.",
-                    "Leaders are honest about what they know and don't know regarding AI."
-                ]
-            },
-            {
-                dimension: "9. POLICY & COMMUNICATION",
-                description: "Clear guidance and communication",
-                questions: [
-                    "My organization has a simple, accessible AI policy or AI charter that I can easily find.",
-                    "There are clear incentives or recognition for teams that successfully adopt AI.",
-                    "I know which specific AI tools or platforms are officially approved for me to use.",
-                    "AI-related policies and guidelines are communicated consistently across all levels of the organization.",
-                    "The messages I receive about AI do not conflict or send mixed signals.",
-                    "There is good alignment between what leadership says about AI and what actually happens in practice."
-                ]
-            },
-            {
-                dimension: "10. BENEFIT REALIZATION",
-                description: "Visible AI impact",
-                questions: [
-                    "AI benefits are explained to me in concrete, task-specific terms, such as time saved on a particular task.",
-                    "I can name specific examples where AI has improved speed or quality in my own work.",
-                    "My organization shares internal success stories of AI with clear numbers or impact metrics.",
-                    "Time or effort saved through AI is measured and recognized in my team or organization.",
-                    "I clearly notice the benefits of AI in my daily work rather than feeling its impact is vague or invisible."
-                ]
-            },
-            {
-                dimension: "11. ADOPTION STAGE & BARRIERS",
-                description: "Current phase and scaling readiness",
-                questions: [
-                    "In my team, people are generally motivated to try new AI tools.",
-                    "There is not a lot of bureaucratic friction that stops us from using AI.",
-                    "AI is viewed as a way to reduce or replace low-value work, not as an extra burden on top of existing tasks.",
-                    "AI is embedded into our regular workflows rather than used only in one-off or ad hoc ways.",
-                    "We can see clear, measurable improvements from our use of AI in speed, quality, or cost.",
-                    "In my organization, AI is already being used for complex, high-value decisions, not just simple or low-risk tasks.",
-                    "Our AI pilots usually move forward into scaled deployment rather than stalling at experiment stage.",
-                    "Over the past year, overall AI usage in my organization has deepened rather than plateaued or declined."
-                ]
+    const dimensionsData = [
+        { name: "Exploration", desc: "The cognitive drive to proactively investigate, experiment, and pilot emergent AI capabilities beyond mandated workflows.", scientific: "Empirical data suggests that high Exploration scores correlate with reduced time-to-value in software deployments. It represents the 'Curiosity Quotient' applied to digital tools.", dev: "Institutionalize 'Innovation Sprints' where experimentation is decoupled from immediate KPIs. Establish safe-to-fail sandboxes to lower the psychological barrier to entry." },
+        { name: "Persistence", desc: "The behavioral resilience required to troubleshoot hallucinations, non-deterministic outputs, and initial tool friction.", scientific: "Iterative persistence is the primary differentiator between casual users and 'power users.' This dimension measures the tolerance for computational ambiguity.", dev: "Reward the documentation of failure as much as success. Create a 'Prompt Library' where shared troubleshooting becomes organizational knowledge." },
+        { name: "Integration", desc: "The degree of alignment between AI use and established ethical, legal, and operational governance structures.", scientific: "Unchecked integration poses systemic risk. High scores reflect an internalisation of governance as a facilitator rather than a constraint.", dev: "Embed ethics checkpoints directly into tool interfaces. Conduct regular workshops on algorithmic bias and data privacy to maintain high awareness levels." },
+        { name: "Influence", desc: "Social contagion and peer-to-peer advocacy for AI adoption within internal professional networks.", scientific: "Diffusion of Innovation theory posits that 'Influence' is the engine of the majority's adoption. This measures the peer-led network effect.", dev: "Formalize internal 'Champion' roles. Implement peer-mentoring programs where high-influence individuals guide more hesitant colleagues." },
+        { name: "Psychology", desc: "Socio-psychological security regarding professional identity and perceived replacement threats.", scientific: "Identity threat is the leading cause of covert resistance. This dimension tracks the shift from 'replacement anxiety' to 'augmentation confidence'.", dev: "Explicitly communicate AI as a 'Human-in-the-loop' augmentation tool. Highlight the displacement of mundane tasks to favor high-value creative work." },
+        { name: "Digital Temperament", desc: "Comfort with probabilistic logic and non-deterministic technological environments.", scientific: "Classic computing is binary; AI is probabilistic. This dimension measures the cognitive flexibility required for non-linear digital interactions.", dev: "Educate staff on 'Confidence Intervals' in AI output. Shift performance metrics from 'Binary Correctness' to 'Weighted Accuracy' in experimental phases." },
+        { name: "Trust", desc: "Confidence in institutional AI logic, transparency of systems, and the reliability of organizational outputs.", scientific: "Trust is a multifaceted construct involving system reliability and human transparency. It is the foundation of long-term sustainable adoption.", dev: "Promote Explainable AI (XAI) tools. Ensure leadership transparency regarding which AI systems are used and for what specific purposes." },
+        { name: "Leadership", desc: "Executive commitment, resource allocation, and active behavioral role-modeling of AI proficiency.", scientific: "Organizational culture is a shadow of leadership. This measures the executive 'buy-in' through visible action and funding allocation.", dev: "Encourage leaders to share their personal AI use-cases. Implement reverse-mentoring where junior AI experts advise senior leadership teams." },
+        { name: "Policy", desc: "Clarity of institutional guardrails, incentivization structures, and evolving governance rules.", scientific: "Policy lag often hampers innovation. This dimension measures the effectiveness and accessibility of the regulatory framework.", dev: "Transition from static policy documents to dynamic 'Living Guidelines'. Simplify approved tool lists with clear, tiered access levels based on risk." },
+        { name: "Benefit", desc: "Tangible perception of quality, speed, or creative gains facilitated by AI tool usage.", scientific: "The 'Value-Capture' perception determines sustained usage. Without visible benefit, adoption eventually regresses to the mean.", dev: "Track and publish time-saved metrics across different departments. Highlight qualitative wins where AI enabled previously impossible creative feats." },
+        { name: "Adoption", desc: "Structural embedding of AI into core daily operations and longitudinal workflow consistency.", scientific: "Adoption is the final stage of maturity, moving from pilot phases to 'business-as-usual' infrastructure. It reflects the normalization of AI.", dev: "Monitor the 'Pilot-to-Scale' ratio. Ensure that successful AI experiments are systematically converted into standard operating procedures (SOPs)." }
+    ];
+
+    const allQuestions = [
+{ dIdx:0, text:"I regularly dedicate time to exploring new AI features before they are officially required." },
+{ dIdx:0, text:"I am often the first among my peers to test a new AI application or update." },
+{ dIdx:0, text:"I find experimentation with AI to be an energizing part of my professional development." },
+{ dIdx:0, text:"I actively seek out 'beta' access to emerging AI tools to stay ahead of the curve." },
+{ dIdx:0, text:"I find myself thinking about new ways AI could solve my current work challenges." },
+{ dIdx:0, text:"I often research the technical mechanisms behind the AI tools I use daily." },
+
+{ dIdx:1, text:"When an AI tool fails to give me the right output, I immediately try a different prompting strategy." },
+{ dIdx:1, text:"I am willing to spend significant time 'fine-tuning' an AI response to get it exactly right." },
+{ dIdx:1, text:"Technical errors in AI tools rarely discourage me from using them again." },
+{ dIdx:1, text:"I view AI 'hallucinations' as puzzles to be solved rather than reasons to quit." },
+{ dIdx:1, text:"I persist with an AI workflow even if the initial setup is complex or confusing." },
+{ dIdx:1, text:"I am patient with the current limitations of AI, knowing it will improve through iteration." },
+
+{ dIdx:2, text:"I always verify that my AI usage complies with my organization's data privacy policies." },
+{ dIdx:2, text:"I feel a strong responsibility to check AI outputs for bias or ethical inconsistencies." },
+{ dIdx:2, text:"I refuse to use AI tools that don't meet my institution's security standards." },
+{ dIdx:2, text:"I actively document my AI workflows to ensure they can be audited if necessary." },
+{ dIdx:2, text:"I prioritize ethical considerations over speed when using AI for critical tasks." },
+{ dIdx:2, text:"I feel my use of AI enhances the integrity of my final professional output." },
+
+{ dIdx:3, text:"I frequently advocate for the benefits of AI to colleagues who are hesitant." },
+{ dIdx:3, text:"Other team members often come to me for advice on how to use AI effectively." },
+{ dIdx:3, text:"I enjoy presenting my AI-driven successes in team meetings or shared forums." },
+{ dIdx:3, text:"I actively encourage my department to adopt more advanced AI workflows." },
+{ dIdx:3, text:"I feel like a 'champion' for digital transformation within my immediate network." },
+{ dIdx:3, text:"I am comfortable leading an AI-focused initiative if given the opportunity." },
+
+{ dIdx:4, text:"I see AI as a partner that augments my unique human skills rather than a rival." },
+{ dIdx:4, text:"I feel secure about my future job prospects despite the rapid growth of AI." },
+{ dIdx:4, text:"My professional identity feels strengthened by my ability to work with AI." },
+{ dIdx:4, text:"I am excited rather than fearful about the evolution of my role in an AI-driven world." },
+{ dIdx:4, text:"I don't feel 'replaced' when an AI performs a task I used to do manually." },
+{ dIdx:4, text:"Working with AI makes me feel more creative and capable in my career." },
+
+{ dIdx:5, text:"I am comfortable with the fact that AI outputs can vary even with the same input." },
+{ dIdx:5, text:"I enjoy working in technology environments that are constantly changing." },
+{ dIdx:5, text:"Uncertainty in software performance doesn't hinder my productivity." },
+{ dIdx:5, text:"I find it easy to adapt to new interfaces and non-linear software logic." },
+{ dIdx:5, text:"I am naturally drawn to tools that require probabilistic thinking." },
+{ dIdx:5, text:"I rarely feel overwhelmed by the speed of new AI feature releases." },
+
+{ dIdx:6, text:"I trust that my organization selects AI tools that are reliable and safe." },
+{ dIdx:6, text:"I believe the AI outputs I receive are generally accurate and well-reasoned." },
+{ dIdx:6, text:"I feel my organization is transparent about how AI is being used internally." },
+{ dIdx:6, text:"I have confidence in the algorithms that power our core business tools." },
+{ dIdx:6, text:"I trust that AI implementation in my firm is guided by sound logic." },
+{ dIdx:6, text:"I feel comfortable sharing my data with internal AI systems for better results." },
+
+{ dIdx:7, text:"My direct supervisor visibly uses AI to enhance their own work." },
+{ dIdx:7, text:"Leadership consistently provides the resources I need to master AI tools." },
+{ dIdx:7, text:"There is a clear vision from the top about how AI will transform our business." },
+{ dIdx:7, text:"Executives frequently share updates on our AI strategy and progress." },
+{ dIdx:7, text:"I feel supported by management when I try to innovate with new AI tools." },
+{ dIdx:7, text:"Leadership prioritizes AI training as a core part of our professional growth." },
+
+{ dIdx:8, text:"The rules for using AI in my daily tasks are clearly defined and easy to find." },
+{ dIdx:8, text:"I understand the consequences of violating our organization's AI policies." },
+{ dIdx:8, text:"Our AI guidelines are updated frequently enough to keep up with new tech." },
+{ dIdx:8, text:"I know exactly which AI tools are 'approved' and which are restricted." },
+{ dIdx:8, text:"The policy framework here makes me feel safe to use AI within set boundaries." },
+{ dIdx:8, text:"I find our AI governance to be helpful rather than a purely restrictive force." },
+
+{ dIdx:9, text:"AI has noticeably improved the quality of my professional deliverables." },
+{ dIdx:9, text:"I save a significant amount of time each week by using AI for routine tasks." },
+{ dIdx:9, text:"AI allows me to focus on high-level strategy rather than repetitive work." },
+{ dIdx:9, text:"The creative quality of my work has increased since integrating AI." },
+{ dIdx:9, text:"I can handle a higher volume of work without increasing my stress levels thanks to AI." },
+{ dIdx:9, text:"I find that AI helps me bridge gaps in my own technical or specialized knowledge." },
+
+{ dIdx:10, text:"AI tools are now a permanent and essential part of my daily work routine." },
+{ dIdx:10, text:"I would find it very difficult to perform my job effectively without AI now." },
+{ dIdx:10, text:"Most of my core workflows have an AI component built into them." },
+{ dIdx:10, text:"I use AI consistently across every working day, not just for special projects." },
+{ dIdx:10, text:"My team has standardized several processes around AI tool outputs." },
+{ dIdx:10, text:"The use of AI in my role feels like a 'new normal' rather than a trend." },
+{ dIdx:10, text:"I am confident in scaling my AI usage as new organizational needs arise." },
+{ dIdx:10, text:"AI has successfully transitioned from a 'test' tool to a 'core' tool in my unit." }
+    ];
+
+    /* ===========================
+       App state, rendering & behaviour
+       =========================== */
+    let radarChart = null;
+    let pdfRadarChart = null;
+
+    const app = {
+        state: {
+            view: 'hero',
+            user: null,
+            answers: new Array(allQuestions.length).fill(null),
+            currentIdx: 0,
+            isAdmin: false,
+            responses: JSON.parse(localStorage.getItem('ai_instinct_v8') || '[]'),
+            surveyId: 'RES-' + Math.random().toString(36).substr(2,8).toUpperCase()
+        },
+
+        init() {
+            this.updateNav();
+            this.render();
+            // expose to console for debugging if needed
+            window.aiInstinctApp = this;
+        },
+
+        updateNav() {
+            const nav = document.getElementById('nav-actions');
+            if (this.state.isAdmin) {
+                nav.innerHTML = `<button onclick="app.logout()" class="text-rose-400 hover:text-rose-300 transition text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-power-off mr-2"></i>Logout</button>`;
+            } else {
+                nav.innerHTML = `<button onclick="app.navigate('admin')" class="text-slate-400 hover:text-cyan-400 transition text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-shield-halved mr-1"></i>Admin</button>`;
             }
-        ];
+        },
 
-        const app = {
-            currentQuestion: 0,
-            responses: [],
-            allResponses: [],
-            currentReportTab: 'individual',
-            isAdminLoggedIn: false,
-            currentRegistration: null,
+        render() {
+            const port = document.getElementById('view-port');
+            port.innerHTML = '';
+            if (this.state.view === 'hero') this.renderHero(port);
+            else if (this.state.view === 'reg') this.renderReg(port);
+            else if (this.state.view === 'survey') this.renderSurvey(port);
+            else if (this.state.view === 'results') this.renderResults(port);
+            else if (this.state.view === 'admin') this.renderAdmin(port);
+        },
 
-            init() {
-                this.loadResponses();
-                this.loadRegistrations();
-                this.updateBadges();
-            },
+        renderHero(p) {
+            p.innerHTML = `
+                <div class="text-center py-20">
+                    <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-[10px] font-bold tracking-[0.3em] mb-8 uppercase">Scholarly Behavioral Diagnostic</div>
+                    <h1 class="text-6xl font-extrabold mb-6 tracking-tight">
+                        <span class="title-ai">AI</span> <span class="title-instinct italic serif">Instinct</span> <span class="title-index">Index</span>
+                    </h1>
+                    <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto serif italic leading-relaxed">
+                        A rigorous, scholarly psychometric instrument grounded in behavioral science and organizational research, assessing institutional and individual readiness for AI integration across 11 dimensions and 68 behavioral metrics.
+                    </p>
+                    <button onclick="app.navigate('reg')" class="bg-white text-slate-950 font-black px-12 py-5 rounded-full hover:bg-cyan-400 transition-all shadow-xl uppercase tracking-widest text-xs">Initialize Diagnostic</button>
+                </div>
+            `;
+        },
 
-            loadRegistrations() {
-                try {
-                    const stored = localStorage.getItem('aiSurveyRegistrations');
-                    this.allRegistrations = stored ? JSON.parse(stored) : [];
-                } catch (e) {
-                    this.allRegistrations = [];
-                }
-            },
+        renderReg(p) {
+            p.innerHTML = `
+                <div class="max-w-xl mx-auto glass-card p-12 rounded-[2rem]">
+                    <h2 class="text-2xl font-bold mb-8 uppercase tracking-tight text-center">Enrollment</h2>
+                    <form id="reg-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Participant Name</label>
+                            <input required name="name" class="w-full bg-slate-950/50 border border-white/10 rounded-xl p-4 focus:border-cyan-500 outline-none text-white" value="${this.state.user ? this.state.user.name : ''}">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Corporate Email</label>
+                            <input required type="email" name="email" class="w-full bg-slate-950/50 border border-white/10 rounded-xl p-4 focus:border-cyan-500 outline-none text-white" value="${this.state.user ? this.state.user.email : ''}">
+                        </div>
+                        <button type="submit" class="w-full bg-cyan-600 text-white font-bold py-5 rounded-xl hover:bg-cyan-500 transition-all uppercase tracking-widest text-xs">Begin ${allQuestions.length}-Point Analysis</button>
+                    </form>
+                </div>
+            `;
 
-            saveRegistrations() {
-                try {
-                    localStorage.setItem('aiSurveyRegistrations', JSON.stringify(this.allRegistrations));
-                } catch (e) {
-                    console.log('Unable to save registrations');
-                }
-            },
-
-            updateBadges() {
-                const surveyBadge = document.getElementById('surveyBadge');
-                const adminBadge = document.getElementById('adminBadge');
-
-                if (this.allResponses.length === 0) {
-                    surveyBadge.style.display = 'inline-block';
-                } else {
-                    surveyBadge.style.display = 'none';
-                }
-
-                if (this.allResponses.length > 0) {
-                    adminBadge.style.display = 'inline-block';
-                } else {
-                    adminBadge.style.display = 'none';
-                }
-            },
-
-            loadResponses() {
-                try {
-                    const stored = localStorage.getItem('aiSurveyResponses');
-                    this.allResponses = stored ? JSON.parse(stored) : [];
-                } catch (e) {
-                    this.allResponses = [];
-                }
-            },
-
-            saveResponses() {
-                try {
-                    localStorage.setItem('aiSurveyResponses', JSON.stringify(this.allResponses));
-                } catch (e) {
-                    console.log('Unable to save responses');
-                }
-            },
-
-            switchMode(event) {
-                event.preventDefault();
-                const mode = event.target.getAttribute('data-mode');
-
-                document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
-
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(mode).classList.add('active');
-
-                if (mode === 'admin' && this.isAdminLoggedIn) {
-                    this.refreshAdminDashboard();
-                }
-            },
-
-            getTotalQuestions() {
-                return surveyQuestions.reduce((sum, dim) => sum + dim.questions.length, 0);
-            },
-
-            startSurvey() {
-                document.getElementById('registrationModal').classList.add('active');
-            },
-
-            submitRegistration() {
-                const fullName = document.getElementById('fullName').value.trim();
-                const emailId = document.getElementById('emailId').value.trim();
-                const tenure = parseFloat(document.getElementById('tenure').value);
-                const totalExperience = parseFloat(document.getElementById('totalExperience').value);
-
-                if (!fullName || !emailId || isNaN(tenure) || isNaN(totalExperience)) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-
-                if (!emailId.includes('@')) {
-                    alert('Please enter a valid email address');
-                    return;
-                }
-
-                this.currentRegistration = {
-                    fullName,
-                    emailId,
-                    tenure,
-                    totalExperience,
-                    timestamp: new Date().toLocaleString()
-                };
-
-                this.sendRegistrationToSheets();
-
-                document.getElementById('registrationModal').classList.remove('active');
-
-                this.responses = new Array(this.getTotalQuestions()).fill(undefined);
-                this.currentQuestion = 0;
-
-                document.querySelectorAll('.mode-btn').forEach((btn, idx) => {
-                    if (idx === 1) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
+            // Attach submit handler reliably
+            const form = document.getElementById('reg-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const fd = new FormData(form);
+                    const name = (fd.get('name') || '').toString().trim();
+                    const email = (fd.get('email') || '').toString().trim();
+                    if (!name || !email) { alert('Please enter both name and email'); return; }
+                    this.state.user = { name, email };
+                    this.state.answers = new Array(allQuestions.length).fill(null);
+                    this.state.currentIdx = 0;
+                    // regenerate a new survey id for this session
+                    this.state.surveyId = 'RES-' + Math.random().toString(36).substr(2,8).toUpperCase();
+                    this.navigate('survey');
                 });
+            }
+        },
 
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById('survey').classList.add('active');
+        renderSurvey(p) {
+            const q = allQuestions[this.state.currentIdx];
+            const selected = this.state.answers[this.state.currentIdx];
+            const dimName = dimensionsData[q.dIdx].name;
 
-                document.getElementById('userInfoBar').style.display = 'flex';
-                document.getElementById('userNameDisplay').textContent = `👤 ${fullName}`;
-                document.getElementById('userDetailsDisplay').textContent = `Tenure: ${tenure} yrs | Total Experience: ${totalExperience} yrs`;
-
-                setTimeout(() => {
-                    this.renderQuestion();
-                    window.scrollTo(0, 0);
-                }, 50);
-            },
-
-            sendRegistrationToSheets() {
-                const sheetsUrl = document.getElementById('sheetsUrl').value;
-                if (!sheetsUrl) {
-                    console.log('Google Sheets URL not configured.');
-                    return;
-                }
-
-                const payload = {
-                    type: 'registration',
-                    fullName: this.currentRegistration.fullName,
-                    emailId: this.currentRegistration.emailId,
-                    tenure: this.currentRegistration.tenure,
-                    totalExperience: this.currentRegistration.totalExperience,
-                    timestamp: this.currentRegistration.timestamp
-                };
-
-                this.syncWithRetry(sheetsUrl, payload, 'registration');
-            },
-
-            syncWithRetry(sheetsUrl, payload, type, attempt = 1) {
-                const maxAttempts = 3;
-                fetch(sheetsUrl, {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    mode: 'no-cors'
-                }).then(() => {
-                    console.log(`✓ ${type} data synced to Google Sheets (attempt ${attempt})`);
-                }).catch(e => {
-                    if (attempt < maxAttempts) {
-                        console.log(`Retry attempt ${attempt + 1} for ${type}...`);
-                        setTimeout(() => {
-                            this.syncWithRetry(sheetsUrl, payload, type, attempt + 1);
-                        }, 1000 * attempt);
-                    } else {
-                        console.log(`✗ Sheets sync failed after ${maxAttempts} attempts:`, e);
-                    }
-                });
-            },
-
-            getCurrentDimension() {
-                let qIndex = 0;
-                for (let i = 0; i < surveyQuestions.length; i++) {
-                    const qCount = surveyQuestions[i].questions.length;
-                    if (this.currentQuestion >= qIndex && this.currentQuestion < qIndex + qCount) {
-                        return { dimIndex: i, qIndex: this.currentQuestion - qIndex };
-                    }
-                    qIndex += qCount;
-                }
-                return { dimIndex: 0, qIndex: 0 };
-            },
-
-            renderQuestion() {
-                const { dimIndex, qIndex } = this.getCurrentDimension();
-                const dim = surveyQuestions[dimIndex];
-                const q = dim.questions[qIndex];
-                const total = this.getTotalQuestions();
-                const progress = ((this.currentQuestion + 1) / total) * 100;
-
-                document.getElementById('progressFill').style.width = progress + '%';
-                document.getElementById('progressText').textContent = `Question ${this.currentQuestion + 1} of ${total}`;
-                document.getElementById('currentDimension').textContent = dim.dimension;
-
-                let html = `
-                    <div class="dimension-header">
-                        <div class="dimension-name">${dim.dimension}</div>
-                        <div class="dimension-description">${dim.description}</div>
+            p.innerHTML = `
+                <div class="max-w-4xl mx-auto">
+                    <div class="pips-container">
+                        ${allQuestions.map((_, i) => `<div class="pip ${i === this.state.currentIdx ? 'active' : (this.state.answers[i] ? 'completed' : '')}"></div>`).join('')}
                     </div>
-                    <div class="question-text">${q}</div>
-                    <div class="likert-scale">
-                        <div class="likert-option" onclick="app.selectAnswer(1)">
-                            <span>1</span>
-                            <span class="likert-label">Strongly Disagree</span>
+                    <div id="survey-content" class="glass-card p-12 rounded-[2.5rem] border-t-4 border-cyan-500/50 min-h-[420px] flex flex-col justify-center relative">
+                        <div class="text-cyan-400 font-bold text-[10px] tracking-[0.4em] uppercase mb-6 flex items-center">
+                            <span class="h-px w-8 bg-cyan-400 mr-4"></span> Dimension: ${dimName}
                         </div>
-                        <div class="likert-option" onclick="app.selectAnswer(2)">
-                            <span>2</span>
-                            <span class="likert-label">Disagree</span>
-                        </div>
-                        <div class="likert-option" onclick="app.selectAnswer(3)">
-                            <span>3</span>
-                            <span class="likert-label">Neutral</span>
-                        </div>
-                        <div class="likert-option" onclick="app.selectAnswer(4)">
-                            <span>4</span>
-                            <span class="likert-label">Agree</span>
-                        </div>
-                        <div class="likert-option" onclick="app.selectAnswer(5)">
-                            <span>5</span>
-                            <span class="likert-label">Strongly Agree</span>
+                        <h2 class="text-3xl font-bold leading-tight mb-16 text-slate-100 serif italic">"${q.text}"</h2>
+                        <div class="grid grid-cols-5 gap-3">
+                            ${[1,2,3,4,5].map(v => `
+                                <button onclick="app.recordAns(${v})" class="likert-btn ${selected === v ? 'selected' : ''} py-8 rounded-xl flex flex-col items-center">
+                                    <span class="text-2xl font-black mb-1">${v}</span>
+                                    <span class="text-[8px] uppercase tracking-tighter font-bold opacity-60">${["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"][v-1]}</span>
+                                </button>
+                            `).join('')}
                         </div>
                     </div>
-                `;
+                    <div class="flex justify-between mt-8 px-4">
+                        <button onclick="app.prev()" class="text-slate-500 hover:text-white flex items-center text-xs font-bold tracking-widest ${this.state.currentIdx === 0 ? 'invisible' : ''}"><i class="fa-solid fa-chevron-left mr-2"></i> PREV</button>
+                        <span class="text-[10px] text-slate-600 font-mono uppercase tracking-widest">Protocol ID: ${this.state.surveyId} | Metric ${this.state.currentIdx + 1} of ${allQuestions.length}</span>
+                    </div>
+                </div>
+            `;
+        },
 
-                document.getElementById('surveyContent').innerHTML = html;
-
-                setTimeout(() => {
-                    if (this.responses[this.currentQuestion] !== undefined) {
-                        const options = document.querySelectorAll('.likert-option');
-                        options[this.responses[this.currentQuestion] - 1].classList.add('selected');
-                    }
-                }, 50);
-
-                document.getElementById('btnPrev').style.display = this.currentQuestion > 0 ? 'inline-block' : 'none';
-                document.getElementById('btnNext').style.display = this.currentQuestion < total - 1 ? 'inline-block' : 'none';
-                document.getElementById('btnSubmit').style.display = this.currentQuestion === total - 1 ? 'inline-block' : 'none';
-            },
-
-            selectAnswer(value) {
-                this.responses[this.currentQuestion] = value;
-                document.querySelectorAll('.likert-option').forEach(opt => opt.classList.remove('selected'));
-                document.querySelectorAll('.likert-option')[value - 1].classList.add('selected');
-            },
-
-            nextQuestion() {
-                if (this.responses[this.currentQuestion] === undefined) {
-                    alert('Please select an answer before proceeding');
-                    return;
-                }
-                this.currentQuestion++;
-                setTimeout(() => {
-                    this.renderQuestion();
-                    window.scrollTo(0, 0);
-                }, 50);
-            },
-
-            previousQuestion() {
-                if (this.currentQuestion > 0) {
-                    this.currentQuestion--;
-                    setTimeout(() => {
-                        this.renderQuestion();
-                        window.scrollTo(0, 0);
-                    }, 50);
-                }
-            },
-
-            submitSurvey() {
-                const unanswered = this.responses.filter(r => r === undefined).length;
-                if (unanswered > 0) {
-                    alert(`Please complete all questions. Unanswered: ${unanswered}`);
-                    return;
-                }
-
-                const results = this.calculateResults();
-                const response = {
-                    id: 'RESP-' + Date.now(),
-                    responses: [...this.responses],
-                    results: results,
-                    timestamp: new Date().toLocaleString(),
-                    registration: this.currentRegistration
-                };
-
-                this.allResponses.push(response);
-                this.saveResponses();
-                this.updateBadges();
-                this.sendToGoogleSheets(response);
-                this.displayResults(results, response);
-
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById('results').classList.add('active');
-                window.scrollTo(0, 0);
-            },
-
-            sendToGoogleSheets(response) {
-                const sheetsUrl = document.getElementById('sheetsUrl').value;
-                if (!sheetsUrl) {
-                    console.log('Google Sheets URL not configured.');
-                    return;
-                }
-
-                const payload = {
-                    type: 'survey',
-                    responseId: response.id,
-                    fullName: response.registration.fullName,
-                    emailId: response.registration.emailId,
-                    tenure: response.registration.tenure,
-                    totalExperience: response.registration.totalExperience,
-                    overallScore: response.results.overallScore,
-                    readinessLevel: response.results.readinessLevel,
-                    timestamp: response.timestamp,
-                    dimensionScores: response.results.dimensionScores,
-                    allResponses: response.responses
-                };
-
-                this.syncWithRetry(sheetsUrl, payload, 'survey response');
-            },
-
-            calculateResults() {
-                const dimensionScores = [];
-                let qIndex = 0;
-
-                for (let dim = 0; dim < surveyQuestions.length; dim++) {
-                    const qCount = surveyQuestions[dim].questions.length;
-                    let sum = 0;
-
-                    for (let q = 0; q < qCount; q++) {
-                        sum += this.responses[qIndex];
-                        qIndex++;
-                    }
-
-                    const avg = sum / qCount;
-                    const score = Math.round(avg * 20);
-
-                    dimensionScores.push({
-                        name: surveyQuestions[dim].dimension,
-                        score: score
-                    });
-                }
-
-                const overallScore = Math.round(dimensionScores.reduce((sum, d) => sum + d.score, 0) / 11);
-                const readinessLevel = overallScore >= 75 ? 'Strong' : (overallScore >= 50 ? 'Moderate' : 'Weak');
-
-                return {
-                    overallScore,
-                    readinessLevel,
-                    dimensionScores
-                };
-            },
-
-            displayResults(results, response) {
-                const recommendations = {
-                    "Strong": "Your organization demonstrates strong behavioral readiness for AI adoption. Focus on scaling and expanding AI initiatives across more complex use cases.",
-                    "Moderate": "Your organization has foundational readiness but needs targeted interventions. Address the lowest-scoring dimensions to unlock full potential.",
-                    "Weak": "Significant behavioral gaps require foundational change management. Start with psychological safety, leadership alignment, and clear communication."
-                };
-
-                const dimRecommendations = {
-                    "1. EXPLORATION (Try)": "Encourage experimentation through low-risk pilot programs and internal innovation challenges.",
-                    "2. PERSISTENCE (Sustain)": "Build resilience through peer mentoring and celebrating learning from failures.",
-                    "3. INTEGRATION (Normalize)": "Create clear ethical guidelines and governance frameworks for responsible AI use.",
-                    "4. INFLUENCE (Scale)": "Establish communities of practice and internal AI champions for knowledge sharing.",
-                    "5. PSYCHOLOGICAL BARRIERS": "Address fears through psychological safety programs and transparent communication.",
-                    "6. DIGITAL TEMPERAMENT": "Offer tailored training programs matched to individual comfort levels with technology.",
-                    "7. TRUST & EXPLAINABILITY": "Enhance AI transparency through explainability documentation and performance metrics.",
-                    "8. LEADERSHIP & CHANGE MANAGEMENT": "Ensure visible executive sponsorship and consistent messaging about AI strategy.",
-                    "9. POLICY & COMMUNICATION": "Create clear, accessible AI policies and consistent organizational communication.",
-                    "10. BENEFIT REALIZATION": "Showcase concrete AI impact through success stories and measurable metrics.",
-                    "11. ADOPTION STAGE & BARRIERS": "Scale successful pilots and address systemic barriers to adoption."
-                };
-
-                const strengths = results.dimensionScores.filter(d => d.score >= 75).map(d => d.name);
-                const weakAreas = results.dimensionScores.filter(d => d.score < 50).map(d => d.name);
-
-                let html = `
-                    <div class="thank-you-box">
-                        <div class="thank-you-icon">✅</div>
-                        <div class="score-label">Your AI Instinct Index Score</div>
-                        <div class="score-number">${results.overallScore}</div>
-                        <div class="readiness-classification">${results.readinessLevel} Readiness</div>
-                        <div style="margin-top: 20px; font-size: 1rem; line-height: 1.6;">${recommendations[results.readinessLevel]}</div>
-                        <div class="response-info">
-                            Response ID: <strong>${response.id}</strong> | Submitted: <strong>${response.timestamp}</strong>
+        renderResults(p) {
+            const res = this.processResults();
+            p.innerHTML = `
+                <div class="py-6 space-y-12">
+                    <div class="text-center">
+                        <div class="mb-4 text-[10px] font-bold text-cyan-500 tracking-[0.4em] uppercase">Diagnostic Prepared for:</div>
+                        <h2 class="text-5xl font-extrabold mb-2 serif italic text-white">${this.state.user.name}</h2>
+                        <div class="max-w-2xl mx-auto bg-white/5 p-6 rounded-2xl mt-8">
+                            <div class="text-7xl font-black text-white mb-2">${res.overall}%</div>
+                            <p class="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-4">Maturity Status: ${this.getClass(res.overall)}</p>
+                            <p class="text-xs text-slate-400 leading-relaxed serif italic">
+                                "Your profile reflects a ${this.getClass(res.overall).toLowerCase()} level of AI alignment. This diagnostic indicates strength in ${res.scores.sort((a,b)=>b.score-a.score)[0].name} and identifies specific developmental opportunities."
+                            </p>
                         </div>
                     </div>
 
-                    <h3 style="color: #00f0ff; margin-bottom: 20px; font-size: 1.3rem;">📊 Behavioral Dimension Scores</h3>
-                    <div class="dimension-results">
-                `;
-
-                results.dimensionScores.forEach(dimension => {
-                    let cardClass = 'dimension-card';
-                    if (dimension.score >= 75) {
-                        cardClass += '';
-                    } else if (dimension.score >= 50) {
-                        cardClass += ' medium';
-                    } else {
-                        cardClass += ' weak';
-                    }
-
-                    html += `
-                        <div class="${cardClass}">
-                            <div class="dimension-title">${dimension.name}</div>
-                            <div class="score-text">${dimension.score}/100</div>
-                            <div class="score-bar">
-                                <div class="score-fill" style="width: ${dimension.score}%"></div>
+                    <div class="grid lg:grid-cols-2 gap-10">
+                        <div class="glass-card p-10 rounded-[2.5rem] sticky top-24">
+                            <div class="aspect-square"><canvas id="final-radar"></canvas></div>
+                            <div class="mt-8">
+                                <button onclick="app.downloadPDF()" class="w-full bg-white text-slate-950 font-black py-6 rounded-2xl hover:bg-cyan-400 transition-all flex items-center justify-center gap-4 uppercase tracking-widest text-xs shadow-xl">
+                                    <i class="fa-solid fa-file-pdf text-xl"></i> Export Comprehensive Report
+                                </button>
                             </div>
-                            <div class="dimension-recommendation">${dimRecommendations[dimension.name]}</div>
                         </div>
-                    `;
-                });
+                        <div class="space-y-6">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 border-b border-white/5 pb-2">Dimension Scores</h3>
+                            <div class="grid gap-4">
+                                ${res.scores.map(s => `
+                                    <div class="glass-card p-6 rounded-2xl border-l-4 ${s.score >= 75 ? 'border-teal-500' : (s.score >= 50 ? 'border-cyan-500' : 'border-rose-500')}">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div class="text-xs font-bold text-slate-200 uppercase">${s.name}</div>
+                                            <div class="text-2xl font-black text-white">${s.score}%</div>
+                                        </div>
+                                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                            <div class="h-full ${s.score >= 75 ? 'bg-teal-500' : (s.score >= 50 ? 'bg-cyan-500' : 'bg-rose-500')}" style="width: ${s.score}%"></div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => this.drawRadar('final-radar', res.scores), 120);
+        },
 
-                html += `</div>`;
-
-                if (strengths.length > 0) {
-                    html += `
-                        <h3 style="color: #00f0ff; margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem;">✨ Key Strengths</h3>
-                        <div style="margin-bottom: 30px;">
-                    `;
-                    strengths.forEach(s => {
-                        html += `<span class="strength-badge strength-strong">${s}</span>`;
-                    });
-                    html += `</div>`;
-                }
-
-                if (weakAreas.length > 0) {
-                    html += `
-                        <h3 style="color: #ff4444; margin-bottom: 20px; font-size: 1.3rem;">⚠️ Priority Areas for Improvement</h3>
-                        <div style="margin-bottom: 30px;">
-                    `;
-                    weakAreas.forEach(w => {
-                        html += `<span class="strength-badge strength-weak">${w}</span>`;
-                    });
-                    html += `</div>`;
-                }
-
-                html += `
-                    <div class="export-buttons">
-                        <button class="btn-export primary" onclick="app.downloadPDFReport('${response.id}')">📄 Download PDF Report</button>
-                        <button class="btn-export" onclick="app.exportResultsAsJSON()">📥 Download Report (JSON)</button>
-                        <button class="btn-export" onclick="app.printResults()">🖨️ Print Results</button>
-                        <button class="btn-export" onclick="app.restartSurvey()">🔄 Take Survey Again</button>
+        renderAdmin(p) {
+            if (!this.state.isAdmin) {
+                p.innerHTML = `
+                    <div class="max-w-md mx-auto glass-card p-12 rounded-[3rem] text-center">
+                        <h2 class="text-xl font-bold mb-8 uppercase tracking-widest">Admin Entry</h2>
+                        <input type="password" id="admin-p" class="w-full bg-slate-950/50 border border-white/10 p-5 rounded-2xl mb-6 outline-none focus:border-cyan-500 text-center text-3xl tracking-[0.5em]" placeholder="••••">
+                        <button onclick="app.login()" class="w-full bg-cyan-700 text-white font-black py-5 rounded-2xl hover:bg-cyan-600 transition-all uppercase tracking-widest text-xs">Authorize</button>
                     </div>
                 `;
+                return;
+            }
+            p.innerHTML = `
+                <div class="space-y-8">
+                    <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-6 gap-4">
+                        <h2 class="text-4xl font-extrabold uppercase">Diagnostic <span class="title-instinct">Console</span></h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="app.showShareModal()" class="bg-indigo-600 text-white px-5 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-share-nodes mr-2"></i>Distribute</button>
+                            <button onclick="app.exportCSV()" class="bg-slate-800 text-white px-5 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest">Master Export</button>
+                            <button onclick="app.adminTeamDownload()" class="bg-green-600 text-white px-5 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-file-pdf mr-2"></i>Team Report</button>
+                            <button onclick="app.resetSystem()" class="bg-rose-900/40 text-rose-400 px-5 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest">System Reset</button>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-[2rem] overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-white/5 text-[10px] uppercase font-bold text-slate-500 tracking-widest">
+                                <tr><th class="px-8 py-4">Subject</th><th class="px-8 py-4 text-center">Score</th><th class="px-8 py-4 text-right">Actions</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                ${this.state.responses.map((r, i) => `
+                                    <tr class="hover:bg-white/5 transition">
+                                        <td class="px-8 py-6"><div class="font-bold text-slate-200">${r.user.name}</div><div class="text-[9px] font-mono text-slate-600">${r.user.email}</div></td>
+                                        <td class="px-8 py-6 text-center"><span class="font-black ${r.overall >= 75 ? 'text-teal-400' : (r.overall >= 50 ? 'text-cyan-400' : 'text-rose-400')}">${r.overall}%</span></td>
+                                        <td class="px-8 py-6 text-right space-x-4">
+                                            <button onclick="app.retake(${i})" class="text-[9px] font-bold text-amber-500 uppercase">Retake</button>
+                                            <button onclick="app.adminIndivDownload(${i})" class="text-slate-500 hover:text-cyan-400"><i class="fa-solid fa-file-pdf"></i></button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        },
 
-                document.getElementById('resultsContent').innerHTML = html;
-            },
+        showShareModal() {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'share-modal';
+            overlay.innerHTML = `
+                <div class="glass-card p-8 rounded-2xl max-w-sm w-full text-center">
+                    <h3 class="text-xl font-bold mb-4 uppercase">Distribute Survey</h3>
+                    <div class="grid gap-3">
+                        <button onclick="app.shareByEmail()" class="bg-white/5 p-3 rounded-xl hover:bg-white/10"><i class="fa-solid fa-envelope mr-2 text-cyan-400"></i> Email Invite</button>
+                        <button onclick="app.shareByWhatsApp()" class="bg-white/5 p-3 rounded-xl hover:bg-white/10"><i class="fa-brands fa-whatsapp mr-2 text-emerald-400"></i> WhatsApp</button>
+                    </div>
+                    <button onclick="document.getElementById('share-modal').remove()" class="mt-6 text-xs text-slate-400 uppercase font-bold">Close</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        },
 
-            restartSurvey() {
-                document.getElementById('fullName').value = '';
-                document.getElementById('emailId').value = '';
-                document.getElementById('tenure').value = '';
-                document.getElementById('totalExperience').value = '';
-                this.currentRegistration = null;
-                this.startSurvey();
-            },
+        shareByEmail() {
+            const recipient = prompt("Enter recipient email:");
+            if (!recipient) return;
+            const subject = "AI Instinct Index Survey Invite";
+            const body = `Please participate in the AI Instinct Index Behavioral Diagnostic: ${window.location.href}`;
+            window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        },
 
-            waitForJsPDF(maxAttempts = 6, attempt = 0) {
-                return new Promise((resolve, reject) => {
-                    if (window.jspdf && window.jspdf.jsPDF) {
-                        console.log('✓ jsPDF library loaded successfully');
-                        resolve();
-                        return;
+        shareByWhatsApp() {
+            const num = prompt("Enter phone number with country code (e.g., 919876543210):");
+            if (!num) return;
+            const msg = `Join the AI Instinct Index Behavioral Diagnostic Survey: ${window.location.href}`;
+            window.open(`https://wa.me/${num.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+        },
+
+        navigate(v) { this.state.view = v; this.updateNav(); this.render(); },
+
+        login() { const v = document.getElementById('admin-p'); if (v && v.value === CONFIG.ADMIN_PASS) { this.state.isAdmin = true; this.navigate('admin'); } else alert('Invalid Credentials'); },
+
+        logout() { this.state.isAdmin = false; this.navigate('hero'); },
+
+        recordAns(v) {
+            this.state.answers[this.state.currentIdx] = v;
+            this.render(); // update UI to show selection
+            // small delay to animate before advancing
+            setTimeout(() => {
+                const content = document.getElementById('survey-content');
+                if (content) content.classList.add('fade-out');
+                setTimeout(() => {
+                    if (this.state.currentIdx < allQuestions.length - 1) {
+                        this.state.currentIdx++;
+                        this.render();
+                    } else {
+                        this.complete();
                     }
-                    
-                    if (attempt >= maxAttempts) {
-                        console.error('✗ jsPDF library timeout after ' + (attempt * 500) + 'ms');
-                        reject(new Error('jsPDF library timeout'));
-                        return;
-                    }
-                    
-                    console.log(`Waiting for jsPDF library... (attempt ${attempt + 1}/${maxAttempts})`);
-                    setTimeout(() => {
-                        this.waitForJsPDF(maxAttempts, attempt + 1).then(resolve).catch(reject);
-                    }, 500);
-                });
-            },
+                }, 140);
+            }, 160);
+        },
 
-            downloadPDFReport(responseId) {
-                const response = this.allResponses.find(r => r.id === responseId);
-                if (!response) {
-                    alert('Response not found');
-                    return;
-                }
+        prev() { if (this.state.currentIdx > 0) { this.state.currentIdx--; this.render(); } },
 
-                const btn = event.target;
-                btn.textContent = '⏳ Generating PDF...';
-                btn.disabled = true;
+        retake(idx) {
+            const r = this.state.responses[idx];
+            if (!r) return;
+            this.state.user = r.user;
+            this.state.answers = new Array(allQuestions.length).fill(null);
+            this.state.currentIdx = 0;
+            this.state.isAdmin = false;
+            this.navigate('reg');
+        },
 
-                this.waitForJsPDF()
-                    .then(() => {
-                        try {
-                            const { jsPDF } = window.jspdf;
-                            const doc = new jsPDF();
-                            const pageHeight = doc.internal.pageSize.getHeight();
-                            const pageWidth = doc.internal.pageSize.getWidth();
-                            let yPosition = 20;
+        resetSystem() {
+            if (confirm('DANGER: This will delete ALL responses. Proceed?')) {
+                localStorage.removeItem('ai_instinct_v8');
+                this.state.responses = [];
+                this.state.user = null;
+                this.state.answers = new Array(allQuestions.length).fill(null);
+                this.state.currentIdx = 0;
+                this.state.isAdmin = false;
+                this.navigate('reg');
+            }
+        },
 
-                            // Title
-                            doc.setFontSize(20);
-                            doc.setTextColor(0, 240, 255);
-                            doc.text('AI Instinct Index Report', 20, yPosition);
+        async complete() {
+            const res = this.processResults();
+            const record = { id: this.state.surveyId, user: this.state.user, ...res, timestamp: new Date().toLocaleString() };
+            this.state.responses.push(record);
+            localStorage.setItem('ai_instinct_v8', JSON.stringify(this.state.responses));
+            this.navigate('results');
+            // generate PDF (best-effort)
+            try { await this.generatePDF(record); } catch(e) { console.error('PDF gen failed', e); }
+        },
 
-                            // Header Info
-                            yPosition += 12;
-                            doc.setFontSize(10);
-                            doc.setTextColor(180, 180, 190);
-                            doc.text(`Response ID: ${response.id}`, 20, yPosition);
-                            yPosition += 7;
-                            doc.text(`Name: ${response.registration.fullName}`, 20, yPosition);
-                            yPosition += 7;
-                            doc.text(`Email: ${response.registration.emailId}`, 20, yPosition);
-                            yPosition += 7;
-                            doc.text(`Tenure: ${response.registration.tenure} yrs | Experience: ${response.registration.totalExperience} yrs`, 20, yPosition);
-                            yPosition += 7;
-                            doc.text(`Date: ${response.timestamp}`, 20, yPosition);
+        processResults() {
+            const scores = dimensionsData.map((d, dIdx) => {
+                const qIdxs = allQuestions.map((q,i) => q.dIdx === dIdx ? i : -1).filter(i => i !== -1);
+                const sum = qIdxs.reduce((acc, i) => acc + (this.state.answers[i] || 0), 0);
+                const score = qIdxs.length ? Math.round((sum / (qIdxs.length * 5)) * 100) : 0;
+                return { ...d, score };
+            });
+            const overall = Math.round(scores.reduce((a,b) => a + b.score, 0) / scores.length);
+            return { scores, overall };
+        },
 
-                            // Overall Score
-                            yPosition += 12;
-                            doc.setFontSize(16);
-                            doc.setTextColor(0, 240, 255);
-                            doc.text(`Score: ${response.results.overallScore}/100`, 20, yPosition);
+        getClass(s) { if (s >= 75) return "High (Leading)"; if (s >= 50) return "Medium (Developing)"; return "Low (Emerging)"; },
 
-                            // Readiness Level
-                            yPosition += 10;
-                            doc.setFontSize(12);
-                            doc.setTextColor(response.results.readinessLevel === 'Strong' ? 0 : 255, 240, 255);
-                            doc.text(`Readiness: ${response.results.readinessLevel}`, 20, yPosition);
+        drawRadar(canvasId, scores, forPdf = false) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return null;
+            const ctx = canvas.getContext('2d');
+            if (forPdf && pdfRadarChart) pdfRadarChart.destroy();
+            else if (!forPdf && radarChart) radarChart.destroy();
 
-                            // Dimension Scores Section
-                            yPosition += 15;
-                            doc.setFontSize(12);
-                            doc.setTextColor(0, 240, 255);
-                            doc.text('Behavioral Dimension Scores:', 20, yPosition);
-
-                            yPosition += 10;
-                            doc.setFontSize(9);
-                            doc.setTextColor(180, 180, 190);
-
-                            response.results.dimensionScores.forEach((dimension, idx) => {
-                                // Auto page break if too close to bottom
-                                if (yPosition > pageHeight - 20) {
-                                    doc.addPage();
-                                    yPosition = 20;
-                                    // Repeat header on new page
-                                    doc.setFontSize(12);
-                                    doc.setTextColor(0, 240, 255);
-                                    doc.text('Behavioral Dimension Scores (continued):', 20, yPosition);
-                                    yPosition += 10;
-                                    doc.setFontSize(9);
-                                    doc.setTextColor(180, 180, 190);
-                                }
-                                
-                                const scoreText = `${idx + 1}. ${dimension.name}: ${dimension.score}/100`;
-                                doc.text(scoreText, 25, yPosition);
-                                yPosition += 6;
-                            });
-
-                            // Footer
-                            yPosition += 10;
-                            doc.setFontSize(8);
-                            doc.setTextColor(100, 100, 100);
-                            doc.text('This report was generated by the AI Instinct Index Assessment Tool', 20, yPosition);
-
-                            // Save
-                            doc.save(`AI-Instinct-Report-${response.id}.pdf`);
-                            console.log('✓ PDF generated successfully: ' + response.id);
-                            btn.textContent = '📄 Download PDF Report';
-                            btn.disabled = false;
-                        } catch (e) {
-                            console.error('✗ PDF generation error:', e);
-                            btn.textContent = '📄 Download PDF Report';
-                            btn.disabled = false;
-                            this.fallbackDownload(response);
+            const labelsWithPct = scores.map(s => `${s.name} (${s.score}%)`);
+            const cfg = {
+                type: 'radar',
+                data: {
+                    labels: labelsWithPct,
+                    datasets: [{
+                        data: scores.map(s => s.score),
+                        backgroundColor: 'rgba(0,240,255,0.15)',
+                        borderColor: '#00f0ff',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00f0ff',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    animation: !forPdf,
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            min: 0, max: 100, ticks: { display: false },
+                            grid: { color: forPdf ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.05)' },
+                            pointLabels: { color: forPdf ? '#334155' : '#94a3b8', font: { size: forPdf ? 12 : 10 } }
                         }
-                    })
-                    .catch(err => {
-                        console.error('✗ Failed to load jsPDF:', err);
-                        btn.textContent = '📄 Download PDF Report';
-                        btn.disabled = false;
-                        this.fallbackDownload(response);
-                    });
-            },
-
-            fallbackDownload(response) {
-                const line = '='.repeat(60);
-                let content = `
-${line}
-AI INSTINCT INDEX - PROFESSIONAL REPORT
-${line}
-
-PARTICIPANT INFORMATION
-${line}
-Response ID:          ${response.id}
-Participant Name:     ${response.registration.fullName}
-Email:                ${response.registration.emailId}
-Tenure (Current Role): ${response.registration.tenure} years
-Total Work Experience: ${response.registration.totalExperience} years
-Assessment Date:      ${response.timestamp}
-
-${line}
-OVERALL ASSESSMENT RESULTS
-${line}
-AI Instinct Index Score: ${response.results.overallScore}/100
-Behavioral Readiness:    ${response.results.readinessLevel}
-
-${line}
-BEHAVIORAL DIMENSION BREAKDOWN
-${line}
-
-`;
-
-                response.results.dimensionScores.forEach((d, idx) => {
-                    const barLength = Math.round(d.score / 5);
-                    const bar = '█'.repeat(barLength) + '░'.repeat(20 - barLength);
-                    content += `\n${idx + 1}. ${d.name}\n`;
-                    content += `   Score: ${d.score}/100\n`;
-                    content += `   Progress: [${bar}]\n`;
-                });
-
-                content += `\n${line}\n`;
-                content += 'Generated by AI Instinct Index Assessment Tool\n';
-                content += `${line}\n`;
-
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `AI-Instinct-Report-${response.id}.txt`;
-                link.click();
-                console.log('✓ Fallback TXT report downloaded: ' + response.id);
-            },
-
-            exportResultsAsJSON() {
-                if (this.allResponses.length === 0) {
-                    alert('No responses to export');
-                    return;
+                    },
+                    plugins: { legend: { display: false } }
                 }
+            };
+            const chartInstance = new Chart(ctx, cfg);
+            if (forPdf) pdfRadarChart = chartInstance; else radarChart = chartInstance;
+            return chartInstance;
+        },
 
-                const dataStr = JSON.stringify(this.allResponses, null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'ai-instinct-results.json';
-                link.click();
-            },
-
-            printResults() {
-                window.print();
-            },
-
-            startNewSurvey() {
-                this.currentRegistration = null;
-                this.startSurvey();
-            },
-
-            unlockAdmin() {
-                const password = document.getElementById('adminPassword').value;
-                if (password === ADMIN_PASSWORD) {
-                    this.isAdminLoggedIn = true;
-                    document.getElementById('adminLoginForm').style.display = 'none';
-                    document.getElementById('adminContent').style.display = 'block';
-                    this.refreshAdminDashboard();
-                } else {
-                    alert('Incorrect password');
-                    document.getElementById('adminPassword').value = '';
-                }
-            },
-
-            logoutAdmin() {
-                this.isAdminLoggedIn = false;
-                document.getElementById('adminLoginForm').style.display = 'block';
-                document.getElementById('adminContent').style.display = 'none';
-                document.getElementById('adminPassword').value = '';
-            },
-
-            refreshAdminDashboard() {
-                const totalResponses = this.allResponses.length;
-                const avgScore = totalResponses > 0 ? Math.round(this.allResponses.reduce((sum, r) => sum + r.results.overallScore, 0) / totalResponses) : 0;
-
-                document.getElementById('totalResponses').textContent = totalResponses;
-                document.getElementById('avgScore').textContent = avgScore;
-                document.getElementById('completionRate').textContent = '100%';
-
-                this.renderIndividualReports();
-                this.renderGroupReport();
-            },
-
-            renderIndividualReports() {
-                let html = '';
-                this.allResponses.forEach(response => {
-                    const badgeClass = response.results.readinessLevel.toLowerCase() === 'strong' ? 'strong' : (response.results.readinessLevel.toLowerCase() === 'moderate' ? 'medium' : 'weak');
-                    const userName = response.registration ? response.registration.fullName : 'Unknown';
-                    html += `
-                        <tr>
-                            <td>${response.id}</td>
-                            <td>${userName}</td>
-                            <td><strong>${response.results.overallScore}/100</strong></td>
-                            <td><span class="strength-badge strength-${badgeClass}">${response.results.readinessLevel}</span></td>
-                            <td>${response.timestamp}</td>
-                            <td><button class="btn-nav" onclick="app.viewDetailedReport('${response.id}')" style="padding: 6px 12px; font-size: 0.85rem;">View</button></td>
-                        </tr>
-                    `;
-                });
-                document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="6" style="text-align: center; color: #b4b4be;">No responses yet</td></tr>';
-            },
-
-            renderGroupReport() {
-                if (this.allResponses.length === 0) {
-                    document.getElementById('groupReportContent').innerHTML = '<p style="color: #b4b4be;">No responses available for group analysis</p>';
-                    return;
-                }
-
-                const dimensionAverages = {};
-                surveyQuestions.forEach((dim, idx) => {
-                    let totalScore = 0;
-                    this.allResponses.forEach(response => {
-                        totalScore += response.results.dimensionScores[idx].score;
-                    });
-                    dimensionAverages[dim.dimension] = Math.round(totalScore / this.allResponses.length);
-                });
-
-                let html = '<div>';
-                Object.entries(dimensionAverages).forEach(([dimension, score]) => {
-                    html += `
-                        <div class="dimension-comparison">
-                            <div class="comparison-label">${dimension}</div>
-                            <div class="comparison-value">${score}/100</div>
-                            <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%; background-color: #00f0ff;"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                document.getElementById('groupReportContent').innerHTML = html;
-            },
-
-            switchReportTab(tab, btn) {
-                this.currentReportTab = tab;
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.querySelectorAll('.report-section').forEach(s => s.classList.remove('active'));
-                document.getElementById(tab).classList.add('active');
-            },
-
-            viewDetailedReport(responseId) {
-                const response = this.allResponses.find(r => r.id === responseId);
-                if (!response) return;
-                alert(`Report: ${responseId}\n\nScore: ${response.results.overallScore}/100\nReadiness: ${response.results.readinessLevel}\n\nDownload JSON for full details.`);
-            },
-
-            syncToGoogleSheets() {
-                if (this.allResponses.length === 0) {
-                    alert('No responses to sync');
-                    return;
-                }
-                
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '⏳ Syncing...';
-                btn.disabled = true;
-
-                let synced = 0;
-                this.allResponses.forEach(response => {
-                    this.sendToGoogleSheets(response);
-                    synced++;
-                });
-
-                setTimeout(() => {
-                    alert(`✓ Synced ${synced} responses to Google Sheets. Check your sheet for data.`);
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    this.refreshAdminDashboard();
-                }, 1500);
-            },
-
-            exportDataAsCSV() {
-                if (this.allResponses.length === 0) {
-                    alert('No data to export');
-                    return;
-                }
-
-                let csv = 'Response ID,Overall Score,Readiness Level,Timestamp\n';
-                this.allResponses.forEach(response => {
-                    csv += `${response.id},${response.results.overallScore},${response.results.readinessLevel},"${response.timestamp}"\n`;
-                });
-
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'ai-instinct-data.csv';
-                link.click();
-            },
-
-            exportGroupReport() {
-                if (this.allResponses.length === 0) {
-                    alert('No data to export');
-                    return;
-                }
-
-                const dimensionAverages = {};
-                surveyQuestions.forEach((dim, idx) => {
-                    let totalScore = 0;
-                    this.allResponses.forEach(response => {
-                        totalScore += response.results.dimensionScores[idx].score;
-                    });
-                    dimensionAverages[dim.dimension] = Math.round(totalScore / this.allResponses.length);
-                });
-
-                let csv = 'Dimension,Average Score\n';
-                Object.entries(dimensionAverages).forEach(([dimension, score]) => {
-                    csv += `"${dimension}",${score}\n`;
-                });
-
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'ai-instinct-group-report.csv';
-                link.click();
-            },
-
-            resetSurvey() {
-                if (confirm('Delete ALL survey responses AND registrations? This cannot be undone.')) {
-                    this.allResponses = [];
-                    this.allRegistrations = [];
-                    this.saveResponses();
-                    this.saveRegistrations();
-                    this.currentQuestion = 0;
-                    this.responses = new Array(this.getTotalQuestions()).fill(undefined);
-                    this.currentRegistration = null;
-                    this.updateBadges();
-                    this.refreshAdminDashboard();
-                    alert('All survey and registration data cleared.');
-                }
-            },
-
-            clearAllData() {
-                if (confirm('Delete ALL response data? This cannot be undone.')) {
-                    this.allResponses = [];
-                    this.saveResponses();
-                    this.updateBadges();
-                    this.refreshAdminDashboard();
-                    alert('All data cleared');
-                }
+        async generatePDF(record) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            // --- PREFIX PAGE ---
+            doc.setFillColor(255,255,255); doc.rect(0, 0, 210, 297, 'F');
+            doc.setTextColor(15,23,42); doc.setFontSize(12);
+            var prefixLines = "AI Behavioral Readiness Report\n\nUnderstanding Human Readiness for AI Adoption Across 11 Behavioral Dimensions\n________________________________________\nExecutive Summary:\nThis report assesses behavioral readiness for AI adoption \u2014 not technical capability.\nMost AI initiatives succeed or fail not because of algorithms, platforms, or data, but because of human behavior. This assessment evaluates how individuals and teams engage with AI across 11 behavioral dimensions that research and practice consistently show to be decisive.\nYour results highlight:\n\u2022\tWhere AI adoption is naturally accelerating\n\u2022\tWhere friction, anxiety, or misalignment may slow progress\n\u2022\tWhich behavioral levers leaders should prioritize next\nThis is not a judgment of performance.\nIt is a diagnostic for readiness.\n________________________________________\nReadiness Classification:\n\u2022\tStrong \u2013 Conditions support sustainable AI adoption\n\u2022\tModerate \u2013 Foundational readiness exists; targeted intervention needed\n\u2022\tEmerging \u2013 Behavioral risks likely to stall AI initiatives\nInterpretation guidance:\n\u2022\tScores above 75 indicate strong alignment between people, leadership, and AI usage.\n\u2022\tScores between 50\u201375 suggest uneven readiness across dimensions.\n\u2022\tScores below 50 indicate behavioral bottlenecks that should be addressed before scaling AI.\n________________________________________\nDimension-by-Dimension Insights and Development Plan:\nWe'd love to help you create a personalised development plan to get to \u2018AI Speed\u2019! It's part of our paid tier. Drop us a line at sreejith@futureowork.com to explore how it can work for you.\n".split('\n');
+            var y = 20;
+            doc.setFont('times','bold'); doc.setFontSize(14); doc.text('AI Behavioral Readiness Report', 15, y); y += 10;
+            doc.setFont('times','normal'); doc.setFontSize(10);
+            y += 6;
+            for (var i=0;i<prefixLines.length;i++){
+                var line = prefixLines[i];
+                if (!line) { y += 6; continue; }
+                var wrapped = doc.splitTextToSize(line, 180);
+                doc.text(wrapped, 15, y);
+                y += (wrapped.length * 6) + 2;
             }
-        };
+            // add a new page for the original cover to preserve original layout
+            doc.addPage();
 
-        app.init();
+
+            // render high-res radar in hidden canvas
+            this.drawRadar('radar-canvas', record.scores, true);
+            await new Promise(r => setTimeout(r, 700));
+            const canvas = document.getElementById('radar-canvas');
+            const chartImg = canvas.toDataURL('image/png', 1.0);
+
+            // cover
+            doc.setFillColor(15,23,42); doc.rect(0,0,210,297,'F');
+            doc.setTextColor(255); doc.setFont("times","bold"); doc.setFontSize(28); doc.text("AI INSTINCT INDEX", 20,50);
+            doc.setTextColor(0,240,255); doc.setFontSize(10); doc.text("PROFESSIONAL BEHAVIORAL MATURITY REPORT", 20,58);
+            doc.setDrawColor(0,240,255); doc.line(20,65,80,65);
+            doc.setFillColor(30,41,59); doc.roundedRect(20,100,170,50,4,4,'F');
+            doc.setTextColor(255); doc.setFontSize(11);
+            doc.text(`Subject: ${record.user.name}`, 30,115);
+            doc.text(`Email: ${record.user.email}`, 30,122);
+            doc.text(`Diagnostic ID: ${record.id}`, 30,129);
+            doc.setFillColor(0,240,255); doc.circle(165,125,18,'F');
+            doc.setTextColor(15,23,42); doc.setFontSize(18); doc.text(`${record.overall}%`,165,127,{align:'center'});
+            doc.addImage(chartImg, 'PNG', 35,160,140,140);
+
+            // per-dimension pages
+            record.scores.forEach((s, i) => {
+                doc.addPage();
+                doc.setFillColor(248,250,252); doc.rect(0,0,210,297,'F');
+                doc.setFillColor(30,41,59); doc.rect(0,0,210,40,'F');
+                doc.setTextColor(255); doc.setFontSize(14); doc.text(`${i+1}. ${s.name.toUpperCase()}`, 20,25);
+                const color = s.score >= 75 ? [20,184,166] : (s.score >= 50 ? [6,182,212] : [244,63,94]);
+                doc.setFillColor(...color); doc.roundedRect(160,15,30,12,2,2,'F');
+                doc.setTextColor(255); doc.setFontSize(10); doc.text(`${s.score}%`,175,23,{align:'center'});
+                doc.setTextColor(51,65,85); doc.setFont("times","bold"); doc.setFontSize(11); doc.text("Empirical Dimension Definition",20,60);
+                doc.setFont("times","normal"); doc.setFontSize(10.5);
+                doc.text(doc.splitTextToSize(s.scientific,170),20,68);
+                doc.setFillColor(255,255,255); doc.setDrawColor(203,213,225);
+                doc.roundedRect(20,120,170,80,2,2,'FD');
+                doc.setTextColor(30,41,59); doc.setFont("helvetica","bold"); doc.setFontSize(11);
+                doc.text("TRANSFORMATION FRAMEWORK & RECOMMENDATIONS",30,135);
+                doc.setFont("helvetica","normal"); doc.setFontSize(10);
+                doc.text(doc.splitTextToSize(s.dev,150),30,145);
+                doc.setTextColor(148,163,184); doc.setFontSize(9); doc.text(`AI Instinct Index | Page ${i+2}`,105,285,{align:'center'});
+            });
+
+            const name = (record.user.name || 'user').replace(/\s+/g,'_');
+            doc.save(`AI_Instinct_Report_${name}.pdf`);
+        },
+
+        adminIndivDownload(idx) { this.generatePDF(this.state.responses[idx]); },
+
+        downloadPDF() {
+            const current = this.state.responses.find(r => r.id === this.state.surveyId);
+            if (current) this.generatePDF(current); else alert('No current report found. Complete the survey first.');
+        },
+
+        async adminTeamDownload() {
+            if (!this.state.responses || this.state.responses.length === 0) { alert("No responses to include in the team report."); return; }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            // --- PREFIX PAGE ---
+            doc.setFillColor(255,255,255); doc.rect(0, 0, 210, 297, 'F');
+            doc.setTextColor(15,23,42); doc.setFontSize(12);
+            var prefixLines = "AI Behavioral Readiness Report\n\nUnderstanding Human Readiness for AI Adoption Across 11 Behavioral Dimensions\n________________________________________\nExecutive Summary:\nThis report assesses behavioral readiness for AI adoption \u2014 not technical capability.\nMost AI initiatives succeed or fail not because of algorithms, platforms, or data, but because of human behavior. This assessment evaluates how individuals and teams engage with AI across 11 behavioral dimensions that research and practice consistently show to be decisive.\nYour results highlight:\n\u2022\tWhere AI adoption is naturally accelerating\n\u2022\tWhere friction, anxiety, or misalignment may slow progress\n\u2022\tWhich behavioral levers leaders should prioritize next\nThis is not a judgment of performance.\nIt is a diagnostic for readiness.\n________________________________________\nReadiness Classification:\n\u2022\tStrong \u2013 Conditions support sustainable AI adoption\n\u2022\tModerate \u2013 Foundational readiness exists; targeted intervention needed\n\u2022\tEmerging \u2013 Behavioral risks likely to stall AI initiatives\nInterpretation guidance:\n\u2022\tScores above 75 indicate strong alignment between people, leadership, and AI usage.\n\u2022\tScores between 50\u201375 suggest uneven readiness across dimensions.\n\u2022\tScores below 50 indicate behavioral bottlenecks that should be addressed before scaling AI.\n________________________________________\nDimension-by-Dimension Insights and Development Plan:\nWe'd love to help you create a personalised development plan to get to \u2018AI Speed\u2019! It's part of our paid tier. Drop us a line at sreejith@futureowork.com to explore how it can work for you.\n".split('\n');
+            var y = 20;
+            doc.setFont('times','bold'); doc.setFontSize(14); doc.text('AI Behavioral Readiness Report', 15, y); y += 10;
+            doc.setFont('times','normal'); doc.setFontSize(10);
+            y += 6;
+            for (var i=0;i<prefixLines.length;i++){
+                var line = prefixLines[i];
+                if (!line) { y += 6; continue; }
+                var wrapped = doc.splitTextToSize(line, 180);
+                doc.text(wrapped, 15, y);
+                y += (wrapped.length * 6) + 2;
+            }
+            // add a new page for the original cover to preserve original layout
+            doc.addPage();
+
+
+            for (let ri = 0; ri < this.state.responses.length; ri++) {
+                const record = this.state.responses[ri];
+                if (ri > 0) doc.addPage();
+
+                this.drawRadar('radar-canvas', record.scores, true);
+                await new Promise(r => setTimeout(r, 700));
+                const canvas = document.getElementById('radar-canvas');
+                const chartImg = canvas.toDataURL('image/png', 1.0);
+
+                doc.setFillColor(15,23,42); doc.rect(0,0,210,297,'F');
+                doc.setTextColor(255); doc.setFont("times","bold"); doc.setFontSize(28); doc.text("AI INSTINCT INDEX", 20,50);
+                doc.setTextColor(0,240,255); doc.setFontSize(10); doc.text("PROFESSIONAL BEHAVIORAL MATURITY REPORT", 20,58);
+                doc.setDrawColor(0,240,255); doc.line(20,65,80,65);
+                doc.setFillColor(30,41,59); doc.roundedRect(20,100,170,50,4,4,'F');
+                doc.setTextColor(255); doc.setFontSize(11);
+                doc.text(`Subject: ${record.user.name}`, 30,115);
+                doc.text(`Email: ${record.user.email}`, 30,122);
+                doc.text(`Diagnostic ID: ${record.id}`, 30,129);
+                doc.setFillColor(0,240,255); doc.circle(165,125,18,'F');
+                doc.setTextColor(15,23,42); doc.setFontSize(18); doc.text(`${record.overall}%`,165,127,{align:'center'});
+                doc.addImage(chartImg, 'PNG', 35,160,140,140);
+
+                record.scores.forEach((s, i) => {
+                    doc.addPage();
+                    doc.setFillColor(248,250,252); doc.rect(0,0,210,297,'F');
+                    doc.setFillColor(30,41,59); doc.rect(0,0,210,40,'F');
+                    doc.setTextColor(255); doc.setFontSize(14); doc.text(`${i+1}. ${s.name.toUpperCase()}`, 20,25);
+                    const color = s.score >= 75 ? [20,184,166] : (s.score >= 50 ? [6,182,212] : [244,63,94]);
+                    doc.setFillColor(...color); doc.roundedRect(160,15,30,12,2,2,'F');
+                    doc.setTextColor(255); doc.setFontSize(10); doc.text(`${s.score}%`,175,23,{align:'center'});
+                    doc.setTextColor(51,65,85); doc.setFont("times","bold"); doc.setFontSize(11); doc.text("Empirical Dimension Definition",20,60);
+                    doc.setFont("times","normal"); doc.setFontSize(10.5);
+                    doc.text(doc.splitTextToSize(s.scientific,170),20,68);
+                    doc.setFillColor(255,255,255); doc.setDrawColor(203,213,225);
+                    doc.roundedRect(20,120,170,80,2,2,'FD');
+                    doc.setTextColor(30,41,59); doc.setFont("helvetica","bold"); doc.setFontSize(11);
+                    doc.text("TRANSFORMATION FRAMEWORK & RECOMMENDATIONS",30,135);
+                    doc.setFont("helvetica","normal"); doc.setFontSize(10);
+                    doc.text(doc.splitTextToSize(s.dev,150),30,145);
+                    doc.setTextColor(148,163,184); doc.setFontSize(9); doc.text(`AI Instinct Index | Page ${i+2}`,105,285,{align:'center'});
+                });
+            }
+
+            const fileName = `AI_Instinct_Team_Report_${new Date().toISOString().slice(0,10)}.pdf`;
+            doc.save(fileName);
+        },
+
+        exportCSV() {
+            let csv = "ID,Name,Email,Overall," + dimensionsData.map(d => d.name).join(",") + "\n";
+            this.state.responses.forEach(r => csv += `${r.id},${r.user.name},${r.user.email},${r.overall}%,` + r.scores.map(s => s.score).join(",") + "\n");
+            const b = new Blob([csv], { type: 'text/csv' }); const u = URL.createObjectURL(b);
+            const a = document.createElement('a'); a.href = u; a.download = `AI_Master_Data.csv`; a.click();
+        }
+    };
+
+    window.onload = () => app.init();
     </script>
 </body>
 </html>
