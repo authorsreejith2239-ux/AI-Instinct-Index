@@ -533,73 +533,148 @@
             if (forPdf) pdfRadarChart = chartInstance; else radarChart = chartInstance;
             return chartInstance;
         },
+                async generatePDF(record) {
+                    try {
+                        var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jspdf;
+                        if (!jsPDF) { alert('PDF library not loaded'); return; }
+                        var doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+                        var M = 15;
+                        var pageW = 210, pageH = 297;
 
-        async generatePDF(record) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            // --- PREFIX PAGE ---
-            doc.setFillColor(255,255,255); doc.rect(0, 0, 210, 297, 'F');
-            doc.setTextColor(15,23,42); doc.setFontSize(12);
-            var prefixLines = "AI Behavioral Readiness Report\n\nUnderstanding Human Readiness for AI Adoption Across 11 Behavioral Dimensions\n________________________________________\nExecutive Summary:\nThis report assesses behavioral readiness for AI adoption \u2014 not technical capability.\nMost AI initiatives succeed or fail not because of algorithms, platforms, or data, but because of human behavior. This assessment evaluates how individuals and teams engage with AI across 11 behavioral dimensions that research and practice consistently show to be decisive.\nYour results highlight:\n\u2022\tWhere AI adoption is naturally accelerating\n\u2022\tWhere friction, anxiety, or misalignment may slow progress\n\u2022\tWhich behavioral levers leaders should prioritize next\nThis is not a judgment of performance.\nIt is a diagnostic for readiness.\n________________________________________\nReadiness Classification:\n\u2022\tStrong \u2013 Conditions support sustainable AI adoption\n\u2022\tModerate \u2013 Foundational readiness exists; targeted intervention needed\n\u2022\tEmerging \u2013 Behavioral risks likely to stall AI initiatives\nInterpretation guidance:\n\u2022\tScores above 75 indicate strong alignment between people, leadership, and AI usage.\n\u2022\tScores between 50\u201375 suggest uneven readiness across dimensions.\n\u2022\tScores below 50 indicate behavioral bottlenecks that should be addressed before scaling AI.\n________________________________________\nDimension-by-Dimension Insights and Development Plan:\nWe'd love to help you create a personalised development plan to get to \u2018AI Speed\u2019! It's part of our paid tier. Drop us a line at sreejith@futureowork.com to explore how it can work for you.\n".split('\n');
-            var y = 20;
-            doc.setFont('times','bold'); doc.setFontSize(14); doc.text('AI Behavioral Readiness Report', 15, y); y += 10;
-            doc.setFont('times','normal'); doc.setFontSize(10);
-            y += 6;
-            for (var i=0;i<prefixLines.length;i++){
-                var line = prefixLines[i];
-                if (!line) { y += 6; continue; }
-                var wrapped = doc.splitTextToSize(line, 180);
-                doc.text(wrapped, 15, y);
-                y += (wrapped.length * 6) + 2;
-            }
-            // add a new page for the original cover to preserve original layout
-            doc.addPage();
+                        function drawBar(x, y, w, h, pct, color) {
+                            doc.setFillColor(230,236,240);
+                            doc.roundedRect(x, y, w, h, 1.5, 1.5, 'F');
+                            if (pct > 0) {
+                                doc.setFillColor(color[0], color[1], color[2]);
+                                doc.roundedRect(x, y, Math.max(2, (w * pct / 100)), h, 1.5, 1.5, 'F');
+                            }
+                            doc.setDrawColor(220,225,230);
+                            doc.roundedRect(x, y, w, h, 1.5, 1.5, 'S');
+                        }
 
+                        // Cover
+                        doc.setFillColor(255,255,255);
+                        doc.rect(0,0,pageW,pageH,'F');
+                        doc.setFont('helvetica','bold'); doc.setFontSize(22); doc.setTextColor(10,30,45);
+                        doc.text('AI INSTINCT INDEX', M, 40);
+                        doc.setFontSize(10); doc.setTextColor(80,100,120);
+                        doc.text('Professional Behavioral Readiness Report', M, 48);
+                        doc.setLineWidth(0.5);
+                        doc.setDrawColor(170,210,220);
+                        doc.line(M,52,pageW-M,52);
 
-            // render high-res radar in hidden canvas
-            this.drawRadar('radar-canvas', record.scores, true);
-            await new Promise(r => setTimeout(r, 700));
-            const canvas = document.getElementById('radar-canvas');
-            const chartImg = canvas.toDataURL('image/png', 1.0);
+                        // Subject box
+                        doc.setFillColor(245,247,250);
+                        doc.roundedRect(M,60,pageW-2*M,36,2,2,'F');
+                        doc.setFontSize(11); doc.setTextColor(20,30,40);
+                        var subj = (record && record.user && record.user.name) ? record.user.name : '[Name]';
+                        var email = (record && record.user && record.user.email) ? record.user.email : '[Email]';
+                        var rid = (record && record.id) ? record.id : '[ID]';
+                        doc.text('Subject: ' + subj, M+4, 72);
+                        doc.setFontSize(10); doc.setTextColor(90,110,130);
+                        doc.text('Email: ' + email, M+4, 80);
+                        doc.text('Report ID: ' + rid, pageW/2 + 10, 72);
+                        doc.text('Date: ' + (new Date().toISOString().slice(0,10)), pageW/2 + 10, 80);
 
-            // cover
-            doc.setFillColor(15,23,42); doc.rect(0,0,210,297,'F');
-            doc.setTextColor(255); doc.setFont("times","bold"); doc.setFontSize(28); doc.text("AI INSTINCT INDEX", 20,50);
-            doc.setTextColor(0,240,255); doc.setFontSize(10); doc.text("PROFESSIONAL BEHAVIORAL MATURITY REPORT", 20,58);
-            doc.setDrawColor(0,240,255); doc.line(20,65,80,65);
-            doc.setFillColor(30,41,59); doc.roundedRect(20,100,170,50,4,4,'F');
-            doc.setTextColor(255); doc.setFontSize(11);
-            doc.text(`Subject: ${record.user.name}`, 30,115);
-            doc.text(`Email: ${record.user.email}`, 30,122);
-            doc.text(`Diagnostic ID: ${record.id}`, 30,129);
-            doc.setFillColor(0,240,255); doc.circle(165,125,18,'F');
-            doc.setTextColor(15,23,42); doc.setFontSize(18); doc.text(`${record.overall}%`,165,127,{align:'center'});
-            doc.addImage(chartImg, 'PNG', 35,160,140,140);
+                        // overall badge
+                        var overall = (record && record.overall) ? String(record.overall) : '__';
+                        doc.setFillColor(6,120,143);
+                        doc.circle(pageW - M - 24, 76, 20, 'F');
+                        doc.setFontSize(16); doc.setTextColor(255,255,255);
+                        doc.text(overall + '%', pageW - M - 24, 80, {align:'center', baseline:'middle'});
 
-            // per-dimension pages
-            record.scores.forEach((s, i) => {
-                doc.addPage();
-                doc.setFillColor(248,250,252); doc.rect(0,0,210,297,'F');
-                doc.setFillColor(30,41,59); doc.rect(0,0,210,40,'F');
-                doc.setTextColor(255); doc.setFontSize(14); doc.text(`${i+1}. ${s.name.toUpperCase()}`, 20,25);
-                const color = s.score >= 75 ? [20,184,166] : (s.score >= 50 ? [6,182,212] : [244,63,94]);
-                doc.setFillColor(...color); doc.roundedRect(160,15,30,12,2,2,'F');
-                doc.setTextColor(255); doc.setFontSize(10); doc.text(`${s.score}%`,175,23,{align:'center'});
-                doc.setTextColor(51,65,85); doc.setFont("times","bold"); doc.setFontSize(11); doc.text("Empirical Dimension Definition",20,60);
-                doc.setFont("times","normal"); doc.setFontSize(10.5);
-                doc.text(doc.splitTextToSize(s.scientific,170),20,68);
-                doc.setFillColor(255,255,255); doc.setDrawColor(203,213,225);
-                doc.roundedRect(20,120,170,80,2,2,'FD');
-                doc.setTextColor(30,41,59); doc.setFont("helvetica","bold"); doc.setFontSize(11);
-                doc.text("TRANSFORMATION FRAMEWORK & RECOMMENDATIONS",30,135);
-                doc.setFont("helvetica","normal"); doc.setFontSize(10);
-                doc.text(doc.splitTextToSize(s.dev,150),30,145);
-                doc.setTextColor(148,163,184); doc.setFontSize(9); doc.text(`AI Instinct Index | Page ${i+2}`,105,285,{align:'center'});
-            });
+                        // exec summary
+                        doc.setFontSize(10); doc.setTextColor(50,70,90);
+                        var exec = "This report assesses behavioral readiness for AI adoption — not technical capability. It highlights strengths and development areas across 11 behavioral dimensions.";
+                        var execLines = doc.splitTextToSize(exec, pageW - 2*M);
+                        doc.text(execLines, M, 110);
 
-            const name = (record.user.name || 'user').replace(/\s+/g,'_');
-            doc.save(`AI_Instinct_Report_${name}.pdf`);
-        },
+                        // Attempt radar if available
+                        try {
+                            if (this.drawRadar) { this.drawRadar('radar-canvas', (record.scores || []), true); }
+                            await new Promise(function(r){ setTimeout(r,600); });
+                            var canvas = document.getElementById('radar-canvas');
+                            if (canvas) {
+                                var img = canvas.toDataURL('image/png',1.0);
+                                doc.addPage();
+                                doc.setFontSize(12); doc.setTextColor(15,30,45);
+                                doc.text('Dimension Profile', M, 22);
+                                doc.addImage(img, 'PNG', M, 30, pageW - 2*M, 110);
+                            }
+                        } catch(e) {}
+
+                        // strengths/devs
+                        var scores = (record.scores || []).slice();
+                        scores.sort(function(a,b){ return (b.score||0) - (a.score||0); });
+                        var strengths = scores.slice(0,3).map(function(s){ return (s.name||'') + ' (' + (s.score||0) + '%)'; }).join('; ');
+                        var devs = scores.slice(-3).reverse().map(function(s){ return (s.name||'') + ' (' + (s.score||0) + '%)'; }).join('; ');
+                        doc.setFontSize(10); doc.setTextColor(60,80,90);
+                        doc.text('Top strengths: ' + strengths, M, 150);
+                        doc.text('Primary development areas: ' + devs, M, 158);
+
+                        // per-dimension pages
+                        for (var i=0;i<scores.length;i++) {
+                            var s = scores[i];
+                            doc.addPage();
+                            doc.setFillColor(6,120,143);
+                            doc.rect(0,0,pageW,36,'F');
+                            doc.setTextColor(255); doc.setFontSize(13);
+                            doc.text((i+1) + '. ' + (s.name || '').toUpperCase(), M, 24);
+                            // badge
+                            var badgeX = pageW - M - 24;
+                            doc.setFillColor(255,255,255); doc.circle(badgeX, 24, 12, 'F');
+                            doc.setTextColor(6,120,143); doc.setFontSize(10);
+                            doc.text(String(s.score || 0) + '%', badgeX, 26, {align:'center'});
+
+                            // scientific
+                            doc.setFontSize(10); doc.setTextColor(30,40,50);
+                            var sci = s.scientific || '';
+                            var sciLines = doc.splitTextToSize(sci, pageW - 2*M);
+                            doc.text('Scientific context', M, 44);
+                            doc.setFontSize(9); doc.setTextColor(70,85,95);
+                            doc.text(sciLines, M, 50);
+
+                            var boxY = 50 + sciLines.length * 6 + 6;
+                            doc.setFillColor(255); doc.setDrawColor(220,225,230);
+                            doc.roundedRect(M, boxY, pageW - 2*M, 50, 2, 2, 'FD');
+                            doc.setFontSize(10); doc.setTextColor(15,30,45);
+                            doc.text('Transformation guidance', M + 4, boxY + 8);
+                            doc.setFontSize(9); doc.setTextColor(70,85,95);
+                            var devLines = doc.splitTextToSize(s.dev || '', pageW - 2*M - 8);
+                            doc.text(devLines, M + 4, boxY + 18);
+
+                            // progress bar
+                            var barX = M, barY = boxY + 62;
+                            var color = (s.score >= 75) ? [20,184,166] : (s.score >= 50 ? [6,182,212] : [244,63,94]);
+                            drawBar(barX, barY, pageW - 2*M, 8, s.score || 0, color);
+
+                            // checklist
+                            var checklistY = barY + 12;
+                            doc.setFontSize(9); doc.setTextColor(50,70,90);
+                            doc.text("Leader's quick checklist:", M, checklistY + 5);
+                            var items = [
+                                'Appoint a sponsor and run a 30-day micro-experiment.',
+                                'Communicate one concrete example of desired behavior this week.',
+                                'Add one metric to the team dashboard and review weekly.'
+                            ];
+                            var liY = checklistY + 11;
+                            for (var it=0; it<items.length; it++) {
+                                var lines = doc.splitTextToSize('- ' + items[it], pageW - 2*M - 6);
+                                doc.text(lines, M + 4, liY);
+                                liY += lines.length * 5 + 2;
+                            }
+
+                            doc.setFontSize(8); doc.setTextColor(130,140,150);
+                            doc.text('AI Instinct Index — page ' + (i+3), pageW/2, pageH - 10, {align:'center'});
+                        }
+
+                        var fname = 'AI_Instinct_Report_' + subj.replace(/\s+/g,'_') + '.pdf';
+                        doc.save(fname);
+                    } catch(ex) {
+                        console.error('PDF generation error', ex);
+                        alert('PDF generation failed: ' + (ex && ex.message ? ex.message : String(ex)));
+                    }
+                },
 
         adminIndivDownload(idx) { this.generatePDF(this.state.responses[idx]); },
 
@@ -608,74 +683,80 @@
             if (current) this.generatePDF(current); else alert('No current report found. Complete the survey first.');
         },
 
+                
         async adminTeamDownload() {
-            if (!this.state.responses || this.state.responses.length === 0) { alert("No responses to include in the team report."); return; }
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            // --- PREFIX PAGE ---
-            doc.setFillColor(255,255,255); doc.rect(0, 0, 210, 297, 'F');
-            doc.setTextColor(15,23,42); doc.setFontSize(12);
-            var prefixLines = "AI Behavioral Readiness Report\n\nUnderstanding Human Readiness for AI Adoption Across 11 Behavioral Dimensions\n________________________________________\nExecutive Summary:\nThis report assesses behavioral readiness for AI adoption \u2014 not technical capability.\nMost AI initiatives succeed or fail not because of algorithms, platforms, or data, but because of human behavior. This assessment evaluates how individuals and teams engage with AI across 11 behavioral dimensions that research and practice consistently show to be decisive.\nYour results highlight:\n\u2022\tWhere AI adoption is naturally accelerating\n\u2022\tWhere friction, anxiety, or misalignment may slow progress\n\u2022\tWhich behavioral levers leaders should prioritize next\nThis is not a judgment of performance.\nIt is a diagnostic for readiness.\n________________________________________\nReadiness Classification:\n\u2022\tStrong \u2013 Conditions support sustainable AI adoption\n\u2022\tModerate \u2013 Foundational readiness exists; targeted intervention needed\n\u2022\tEmerging \u2013 Behavioral risks likely to stall AI initiatives\nInterpretation guidance:\n\u2022\tScores above 75 indicate strong alignment between people, leadership, and AI usage.\n\u2022\tScores between 50\u201375 suggest uneven readiness across dimensions.\n\u2022\tScores below 50 indicate behavioral bottlenecks that should be addressed before scaling AI.\n________________________________________\nDimension-by-Dimension Insights and Development Plan:\nWe'd love to help you create a personalised development plan to get to \u2018AI Speed\u2019! It's part of our paid tier. Drop us a line at sreejith@futureowork.com to explore how it can work for you.\n".split('\n');
-            var y = 20;
-            doc.setFont('times','bold'); doc.setFontSize(14); doc.text('AI Behavioral Readiness Report', 15, y); y += 10;
-            doc.setFont('times','normal'); doc.setFontSize(10);
-            y += 6;
-            for (var i=0;i<prefixLines.length;i++){
-                var line = prefixLines[i];
-                if (!line) { y += 6; continue; }
-                var wrapped = doc.splitTextToSize(line, 180);
-                doc.text(wrapped, 15, y);
-                y += (wrapped.length * 6) + 2;
+            try {
+                if (!this.state || !this.state.responses || this.state.responses.length === 0) { alert('No responses to include in the team report.'); return; }
+                var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jspdf;
+                if (!jsPDF) { alert('PDF library not loaded'); return; }
+                var doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+                var M = 15, pageW = 210, pageH = 297;
+                doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text('AI Behavioral Readiness — Team Report', M, 20);
+                doc.setFont('helvetica','normal'); doc.setFontSize(10);
+                doc.text('Generated: ' + (new Date().toISOString().slice(0,10)), M, 26);
+                doc.text('Subjects included: ' + this.state.responses.length, M, 32);
+                doc.addPage();
+
+                for (var ri=0; ri < this.state.responses.length; ri++) {
+                    var record = this.state.responses[ri];
+                    try { if (this.drawRadar) this.drawRadar('radar-canvas', record.scores, true); await new Promise(function(r){ setTimeout(r,500); }); } catch(e) {}
+                    var canvas = document.getElementById('radar-canvas');
+                    var chartImg = null;
+                    try { if (canvas) chartImg = canvas.toDataURL('image/png',1.0); } catch(e) { chartImg = null; }
+
+                    doc.setFillColor(255,255,255); doc.rect(0,0,pageW,pageH,'F');
+                    doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(10,30,45);
+                    var name = (record.user && record.user.name) ? record.user.name : 'Participant';
+                    doc.text(name + ' — AI Behavioral Readiness', M, 30);
+                    doc.setFontSize(10); doc.setTextColor(80,100,120);
+                    doc.text('Email: ' + ((record.user && record.user.email) ? record.user.email : ''), M, 36);
+                    doc.text('Report ID: ' + (record.id || ''), M, 42);
+                    doc.setFillColor(6,120,143); doc.circle(pageW - M - 20, 36, 12, 'F');
+                    doc.setTextColor(255); doc.setFontSize(10); doc.text(String(record.overall || 0) + '%', pageW - M - 20, 38, {align:'center'});
+
+                    if (chartImg) {
+                        try { doc.addImage(chartImg, 'PNG', M, 60, pageW - 2*M, 110); } catch(e) {}
+                    }
+
+                    var sorted = (record.scores || []).slice();
+                    sorted.sort(function(a,b){ return (b.score||0) - (a.score||0); });
+                    var strengths = sorted.slice(0,3).map(function(s){ return (s.name||'') + ' (' + (s.score||0) + '%)'; }).join('; ');
+                    var devs = sorted.slice(-3).reverse().map(function(s){ return (s.name||'') + ' (' + (s.score||0) + '%)'; }).join('; ');
+                    doc.setFontSize(10); doc.setTextColor(40,60,80);
+                    doc.text('Top strengths: ' + strengths, M, 180);
+                    doc.text('Primary development areas: ' + devs, M, 186);
+
+                    var y = 196;
+                    for (var i=0;i < (record.scores || []).length; i++) {
+                        var s = record.scores[i];
+                        var colX = (i % 2 === 0) ? M : (pageW/2 + 4);
+                        if (i>0 && i%2===0) {
+                            if (y > 250) { doc.addPage(); y = 20; }
+                        }
+                        doc.setFontSize(9); doc.setTextColor(20,30,40);
+                        doc.text((i+1) + '. ' + (s.name || ''), colX, y);
+                        var barW = (pageW/2) - 2*M - 8;
+                        var barY = y + 4;
+                        doc.setFillColor(235,240,245); doc.roundedRect(colX, barY, barW, 5, 1, 1, 'F');
+                        var fgW = Math.max(2, (barW * (s.score || 0) / 100));
+                        var color = (s.score >=75) ? [20,184,166] : ((s.score >=50) ? [6,182,212] : [244,63,94]);
+                        doc.setFillColor(color[0], color[1], color[2]);
+                        doc.roundedRect(colX, barY, fgW, 5, 1, 1, 'F');
+                        doc.setFontSize(8); doc.setTextColor(90,100,110);
+                        var sci = s.scientific ? (s.scientific.split('.')[0] + '.') : '';
+                        doc.text((s.score || 0) + '% ' + (sci || ''), colX, barY + 10);
+                        if (i%2===1) y += 34;
+                    }
+
+                    if (ri < this.state.responses.length - 1) doc.addPage();
+                }
+
+                var fileName = 'AI_Instinct_Team_Report_' + (new Date().toISOString().slice(0,10)) + '.pdf';
+                doc.save(fileName);
+            } catch (ex) {
+                console.error('Team PDF error', ex);
+                alert('Team PDF generation failed: ' + (ex && ex.message ? ex.message : String(ex)));
             }
-            // add a new page for the original cover to preserve original layout
-            doc.addPage();
-
-
-            for (let ri = 0; ri < this.state.responses.length; ri++) {
-                const record = this.state.responses[ri];
-                if (ri > 0) doc.addPage();
-
-                this.drawRadar('radar-canvas', record.scores, true);
-                await new Promise(r => setTimeout(r, 700));
-                const canvas = document.getElementById('radar-canvas');
-                const chartImg = canvas.toDataURL('image/png', 1.0);
-
-                doc.setFillColor(15,23,42); doc.rect(0,0,210,297,'F');
-                doc.setTextColor(255); doc.setFont("times","bold"); doc.setFontSize(28); doc.text("AI INSTINCT INDEX", 20,50);
-                doc.setTextColor(0,240,255); doc.setFontSize(10); doc.text("PROFESSIONAL BEHAVIORAL MATURITY REPORT", 20,58);
-                doc.setDrawColor(0,240,255); doc.line(20,65,80,65);
-                doc.setFillColor(30,41,59); doc.roundedRect(20,100,170,50,4,4,'F');
-                doc.setTextColor(255); doc.setFontSize(11);
-                doc.text(`Subject: ${record.user.name}`, 30,115);
-                doc.text(`Email: ${record.user.email}`, 30,122);
-                doc.text(`Diagnostic ID: ${record.id}`, 30,129);
-                doc.setFillColor(0,240,255); doc.circle(165,125,18,'F');
-                doc.setTextColor(15,23,42); doc.setFontSize(18); doc.text(`${record.overall}%`,165,127,{align:'center'});
-                doc.addImage(chartImg, 'PNG', 35,160,140,140);
-
-                record.scores.forEach((s, i) => {
-                    doc.addPage();
-                    doc.setFillColor(248,250,252); doc.rect(0,0,210,297,'F');
-                    doc.setFillColor(30,41,59); doc.rect(0,0,210,40,'F');
-                    doc.setTextColor(255); doc.setFontSize(14); doc.text(`${i+1}. ${s.name.toUpperCase()}`, 20,25);
-                    const color = s.score >= 75 ? [20,184,166] : (s.score >= 50 ? [6,182,212] : [244,63,94]);
-                    doc.setFillColor(...color); doc.roundedRect(160,15,30,12,2,2,'F');
-                    doc.setTextColor(255); doc.setFontSize(10); doc.text(`${s.score}%`,175,23,{align:'center'});
-                    doc.setTextColor(51,65,85); doc.setFont("times","bold"); doc.setFontSize(11); doc.text("Empirical Dimension Definition",20,60);
-                    doc.setFont("times","normal"); doc.setFontSize(10.5);
-                    doc.text(doc.splitTextToSize(s.scientific,170),20,68);
-                    doc.setFillColor(255,255,255); doc.setDrawColor(203,213,225);
-                    doc.roundedRect(20,120,170,80,2,2,'FD');
-                    doc.setTextColor(30,41,59); doc.setFont("helvetica","bold"); doc.setFontSize(11);
-                    doc.text("TRANSFORMATION FRAMEWORK & RECOMMENDATIONS",30,135);
-                    doc.setFont("helvetica","normal"); doc.setFontSize(10);
-                    doc.text(doc.splitTextToSize(s.dev,150),30,145);
-                    doc.setTextColor(148,163,184); doc.setFontSize(9); doc.text(`AI Instinct Index | Page ${i+2}`,105,285,{align:'center'});
-                });
-            }
-
-            const fileName = `AI_Instinct_Team_Report_${new Date().toISOString().slice(0,10)}.pdf`;
-            doc.save(fileName);
         },
 
         exportCSV() {
